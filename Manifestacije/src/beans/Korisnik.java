@@ -4,7 +4,7 @@ import java.util.Date;
 
 public abstract class Korisnik {
 	private String korisnickoIme,lozinka,ime,prezime,pol;
-	private Date datum;
+	private Date datumRodjenja;
 	public String getKorisnickoIme() {
 		return korisnickoIme;
 	}
@@ -35,11 +35,11 @@ public abstract class Korisnik {
 	public void setPol(String pol) {
 		this.pol = pol;
 	}
-	public Date getDatum() {
-		return datum;
+	public Date getDatumRodjenja() {
+		return datumRodjenja;
 	}
-	public void setDatum(Date datum) {
-		this.datum = datum;
+	public void setDatumRodjenja(Date datum) {
+		this.datumRodjenja = datum;
 	}
 
 }
