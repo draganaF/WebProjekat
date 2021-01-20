@@ -1,15 +1,15 @@
 package dao;
 
-import java.io.File;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.MapperFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import beans.Manifestacija;
 
@@ -18,8 +18,7 @@ public class ManifestacijeDAO {
 	private ArrayList<Manifestacija> manifestacije;
 	
 	public ManifestacijeDAO() {
-
-		//Napraviti JSON ucitavanje
+		
 	}
 	
 	public ArrayList<Manifestacija> getManifestacije(){
@@ -53,11 +52,19 @@ public class ManifestacijeDAO {
 		}
 	}
 	//NE znam da li je ovo ok i moze ovako 
-	public void upisiManifestacije() throws JsonGenerationException, JsonMappingException, IOException {
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
-		mapper.enable(SerializationFeature.INDENT_OUTPUT);
-
-		mapper.writeValue(new File("manifestacije.json"), manifestacije);
+	public void upisiManifestacije() throws IOException{
+		Gson gson = new Gson();
+		FileWriter fw = new FileWriter("manifestacije.json");
+		gson.toJson(this.manifestacije, fw);
+		fw.flush();
+		fw.close();
+	}
+	
+	public void ucitajManifestacije() throws FileNotFoundException {
+		
+		Gson gson = new Gson();
+		Type token = new TypeToken<ArrayList<Manifestacija>>(){}.getType();
+		BufferedReader br = new BufferedReader(new FileReader("manifestacije.json"));
+		this.manifestacije = gson.fromJson(br, token);
 	}
 }

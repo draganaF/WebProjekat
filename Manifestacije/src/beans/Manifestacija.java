@@ -1,6 +1,6 @@
 package beans;
 
-import java.awt.Image;
+
 import java.time.LocalDateTime;
 
 public class Manifestacija {
@@ -10,7 +10,7 @@ public class Manifestacija {
 	private LocalDateTime datum;
 	private float cenaKarte;
 	private boolean status;
-	private Image slika;
+	private String slika;
 	private Prodavac prodavac;
 	private Lokacija lokacija;
 	private boolean obrisana;
@@ -21,7 +21,7 @@ public class Manifestacija {
 	
 	
 	public Manifestacija(String naziv, String tipManifestacije, int brojMesta, LocalDateTime datum, float cenaKarte,
-			boolean status, Prodavac prodavac, Lokacija lokacija, boolean obrisana, Image slika) {
+			boolean status, Prodavac prodavac, Lokacija lokacija, boolean obrisana, String slika) {
 		super();
 		this.naziv = naziv;
 		this.tipManifestacije = tipManifestacije;
@@ -73,10 +73,10 @@ public class Manifestacija {
 		this.status = status;
 	}
 	
-	public Image getSlika() {
+	public String getSlika() {
 		return slika;
 	}
-	public void setSlika(Image slika) {
+	public void setSlika(String slika) {
 		this.slika = slika;
 	} 
 	public Prodavac getProdavac() {

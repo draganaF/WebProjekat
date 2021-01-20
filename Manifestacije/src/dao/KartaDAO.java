@@ -1,6 +1,15 @@
 package dao;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import beans.Karta;
 
@@ -69,5 +78,21 @@ public class KartaDAO {
 				break;
 			}
 		}
+	}
+	
+	public void upisiKarte() throws IOException{
+		Gson gson = new Gson();
+		FileWriter fw = new FileWriter("karte.json");
+		gson.toJson(this.karte, fw);
+		fw.flush();
+		fw.close();
+	}
+	
+	public void ucitajKarte() throws FileNotFoundException {
+		
+		Gson gson = new Gson();
+		Type token = new TypeToken<ArrayList<Karta>>(){}.getType();
+		BufferedReader br = new BufferedReader(new FileReader("karte.json"));
+		this.karte = gson.fromJson(br, token);
 	}
 }

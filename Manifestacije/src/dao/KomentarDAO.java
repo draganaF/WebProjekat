@@ -1,6 +1,15 @@
 package dao;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import beans.Komentar;
 
@@ -78,6 +87,22 @@ public class KomentarDAO {
 				return;
 			}
 		}
+	}
+	
+	public void upisiKomentare() throws IOException{
+		Gson gson = new Gson();
+		FileWriter fw = new FileWriter("komentari.json");
+		gson.toJson(this.komentari, fw);
+		fw.flush();
+		fw.close();
+	}
+	
+	public void ucitajKomentare() throws FileNotFoundException {
+		
+		Gson gson = new Gson();
+		Type token = new TypeToken<ArrayList<Komentar>>(){}.getType();
+		BufferedReader br = new BufferedReader(new FileReader("komentari.json"));
+		this.komentari = gson.fromJson(br, token);
 	}
 	
 }
