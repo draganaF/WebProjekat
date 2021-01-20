@@ -4,7 +4,9 @@ public class Adresa {
 	private  String ulica;
 	private String mesto;
 	private int postanskiBroj;
+	private boolean obrisana;
 	
+
 	public Adresa() {}
 
 	public String getUlica() {
@@ -31,4 +33,11 @@ public class Adresa {
 		this.postanskiBroj = postanskiBroj;
 	}
 	
+	public boolean isObrisana() {
+		return obrisana;
+	}
+
+	public void setObrisana(boolean obrisana) {
+		this.obrisana = obrisana;
+	}
 }

@@ -5,6 +5,7 @@ import java.util.Date;
 public abstract class Korisnik {
 	private String korisnickoIme,lozinka,ime,prezime,pol;
 	private Date datumRodjenja;
+	private boolean obrisan;
 	public String getKorisnickoIme() {
 		return korisnickoIme;
 	}
@@ -41,5 +42,12 @@ public abstract class Korisnik {
 	public void setDatumRodjenja(Date datum) {
 		this.datumRodjenja = datum;
 	}
+	public boolean isObrisan() {
+		return obrisan;
+	}
+	public void setObrisan(boolean obrisan) {
+		this.obrisan = obrisan;
+	}
+	
 
 }
