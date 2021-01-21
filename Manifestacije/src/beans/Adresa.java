@@ -5,6 +5,7 @@ public class Adresa {
 	private String mesto;
 	private int postanskiBroj;
 	private boolean obrisana;
+	private String drzava;
 	
 
 	public Adresa() {}
@@ -39,5 +40,13 @@ public class Adresa {
 
 	public void setObrisana(boolean obrisana) {
 		this.obrisana = obrisana;
+	}
+
+	public String getDrzava() {
+		return drzava;
+	}
+
+	public void setDrzava(String drzava) {
+		this.drzava = drzava;
 	}
 }

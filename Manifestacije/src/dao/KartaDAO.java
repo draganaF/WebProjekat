@@ -61,6 +61,17 @@ public class KartaDAO {
 		
 		return validne;
 	}
+	public ArrayList<Karta> karteManifestacije(int idM){
+		
+		ArrayList<Karta> validne = new ArrayList<Karta>();
+		for(Karta k : karte) {
+			if(!k.isObrisana() && k.getManifestacija().getId()==idM) {
+				validne.add(k);
+			}
+		}
+		
+		return validne;
+	}
 	
 	public Karta nadjiKartu(String id) {
 		for(Karta k : karte) {

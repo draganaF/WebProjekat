@@ -4,6 +4,7 @@ package beans;
 import java.time.LocalDateTime;
 
 public class Manifestacija {
+	private int id;
 	private String naziv;
 	private String tipManifestacije;
 	private int brojMesta;
@@ -20,9 +21,10 @@ public class Manifestacija {
 	}
 	
 	
-	public Manifestacija(String naziv, String tipManifestacije, int brojMesta, LocalDateTime datum, float cenaKarte,
+	public Manifestacija(int id,String naziv, String tipManifestacije, int brojMesta, LocalDateTime datum, float cenaKarte,
 			boolean status, Prodavac prodavac, Lokacija lokacija, boolean obrisana, String slika) {
 		super();
+		this.id = id;
 		this.naziv = naziv;
 		this.tipManifestacije = tipManifestacije;
 		this.brojMesta = brojMesta;
@@ -34,7 +36,12 @@ public class Manifestacija {
 		this.lokacija = lokacija;
 		this.obrisana = obrisana;
 	}
-
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
 
 	public String getNaziv() {
 		return naziv;
