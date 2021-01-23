@@ -1,5 +1,6 @@
 package services;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.annotation.PostConstruct;
@@ -8,6 +9,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
@@ -29,24 +31,23 @@ public class KarteService {
 	public void init() {
 		if(ctx.getAttribute("karte")==null) {
 			KartaDAO dao = new KartaDAO();
-			ArrayList<Karta> karte = dao.getKarte(); 
-			ctx.setAttribute("karte", karte);
+			 
+			ctx.setAttribute("karteDAO", dao);
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
 	@GET
 	@Path("/")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ArrayList<Karta> sveKarte(){
-		return (ArrayList<Karta>) ctx.getAttribute("karte");
+		return ((KartaDAO) ctx.getAttribute("karteDAO")).getKarte();
 	}
 	
 	@POST
 	@Path("/dodajKartu")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Karta dodajKartu(Karta k) {
-		KartaDAO dao = new KartaDAO();
+		KartaDAO dao = (KartaDAO) ctx.getAttribute("karteDAO");
 		ArrayList<Karta> karteManifestacije = dao.karteManifestacije(k.getManifestacija().getId());
 		for(Karta karta : karteManifestacije) {
 			if(karta.getId()==k.getId()) {
@@ -56,9 +57,47 @@ public class KarteService {
 		if(karteManifestacije.size()>=k.getManifestacija().getBrojMesta()) {
 			return null;
 		}
+		dao.getKarte().add(k);
 		
+		try {
+			dao.upisiKarte();
+		} catch (IOException e) {
+			
+			e.printStackTrace();
+		}
 		return k;
 	}
 	
+	@GET
+	@Path("/nadjiPoManifestaciji")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ArrayList<Karta> nadjiPoManifestaciji(@QueryParam("id") int id){
+		KartaDAO dao = (KartaDAO) ctx.getAttribute("karteDAO");
+		return dao.karteManifestacije(id);
+		
+	}
+	@GET
+	@Path("/nadjiPoCeni")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ArrayList<Karta> nadjiPoCeni(@QueryParam("odCena") int odCena, @QueryParam("doCena") int doCena){
+		KartaDAO dao = (KartaDAO) ctx.getAttribute("karteDAO");
+		return dao.nadjiPoCeni(odCena, doCena);
+	}
+	
+	@GET
+	@Path("/nadjiPoStatusu")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ArrayList<Karta> nadjiPoStatusu(@QueryParam("status") boolean status){
+		KartaDAO dao = (KartaDAO) ctx.getAttribute("karteDAO");
+		return dao.nadjiPoStatusu(status);
+	}
+	
+	@GET
+	@Path("/nadjiPoTipu")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ArrayList<Karta> nadjiPoTipu(@QueryParam("tip") String tip){
+		KartaDAO dao = (KartaDAO) ctx.getAttribute("karteDAO");
+		return dao.nadjiPoTipu(tip);
+	}
 	
 }

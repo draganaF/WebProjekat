@@ -48,10 +48,10 @@ public class KomentarDAO {
 		return validni;
 	}
 	
-	public ArrayList<Komentar> komentariManifestacije(String naziv){
+	public ArrayList<Komentar> komentariManifestacije(int id){
 		ArrayList<Komentar> validni = new ArrayList<Komentar>();
 		for(Komentar k : komentari) {
-			if(!k.isObrisan() && k.getManifestacija().getNaziv().equalsIgnoreCase(naziv)) {
+			if(!k.isObrisan() && k.getManifestacija().getId() == id) {
 				validni.add(k);
 			}
 		}

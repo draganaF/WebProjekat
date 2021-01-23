@@ -27,7 +27,7 @@ public class Karta {
 		this.tipKarte = tipKarte;
 		this.datumOtkazivanja = datumOtkazivanja;
 		this.kupac = kupac;
-		this.setObrisana(obrisana);
+		this.obrisana= obrisana;
 	}
 
 	public String getId() {

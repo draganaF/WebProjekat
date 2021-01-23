@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -17,7 +18,11 @@ public class KartaDAO {
 	private ArrayList<Karta> karte;
 	
 	public KartaDAO() {
-		
+		try {
+			this.ucitajKarte();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public ArrayList<Karta> getKarte() {
@@ -90,7 +95,35 @@ public class KartaDAO {
 			}
 		}
 	}
+	public ArrayList<Karta> nadjiPoCeni(int odCena, int doCena){
+		ArrayList<Karta> validne = new ArrayList<Karta>();
+		for(Karta k : karte) {
+			if(!k.isObrisana() && k.getCena() >= odCena && k.getCena()<= doCena) {
+				validne.add(k);
+			}
+		}
+		return validne;
+	}
+	public ArrayList<Karta> nadjiPoStatusu(boolean status){
+		ArrayList<Karta> validne = new ArrayList<Karta>();
+		for(Karta k : karte) {
+			if(!k.isObrisana() && k.isStatus()==status) {
+				validne.add(k);
+			}
+		}
+		return validne;
+	}
 	
+	public ArrayList<Karta> nadjiPoTipu(String tip){
+		ArrayList<Karta> karte = new ArrayList<Karta>();
+		for(Karta k : karte) {
+			if(!k.isObrisana() && k.getTipKarte().equalsIgnoreCase(tip)) {
+				karte.add(k);
+			}
+		}
+		return karte;
+	}
+
 	public void upisiKarte() throws IOException{
 		Gson gson = new Gson();
 		FileWriter fw = new FileWriter("karte.json");
