@@ -8,7 +8,7 @@ public class Karta {
 	private Manifestacija manifestacija;
 	private float cena;
 	private boolean status;
-	private String tipKarte;
+	private TipKarte tipKarte;
 	private LocalDateTime datumOtkazivanja;
 	private Kupac kupac;
 	private boolean obrisana;
@@ -17,7 +17,7 @@ public class Karta {
 		
 	}
 
-	public Karta(String id, Manifestacija manifestacija, float cena, boolean status, String tipKarte,
+	public Karta(String id, Manifestacija manifestacija, float cena, boolean status, TipKarte tipKarte,
 			LocalDateTime datumOtkazivanja, Kupac kupac, boolean obrisana) {
 		super();
 		this.id = id;
@@ -62,11 +62,11 @@ public class Karta {
 		this.status = status;
 	}
 
-	public String getTipKarte() {
+	public TipKarte getTipKarte() {
 		return tipKarte;
 	}
 
-	public void setTipKarte(String tipKarte) {
+	public void setTipKarte(TipKarte tipKarte) {
 		this.tipKarte = tipKarte;
 	}
 

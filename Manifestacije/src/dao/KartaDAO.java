@@ -13,6 +13,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import beans.Karta;
+import beans.TipKarte;
 
 public class KartaDAO {
 	private ArrayList<Karta> karte;
@@ -114,10 +115,10 @@ public class KartaDAO {
 		return validne;
 	}
 	
-	public ArrayList<Karta> nadjiPoTipu(String tip){
+	public ArrayList<Karta> nadjiPoTipu(TipKarte tip){
 		ArrayList<Karta> karte = new ArrayList<Karta>();
 		for(Karta k : karte) {
-			if(!k.isObrisana() && k.getTipKarte().equalsIgnoreCase(tip)) {
+			if(!k.isObrisana() && k.getTipKarte().equals(tip)) {
 				karte.add(k);
 			}
 		}

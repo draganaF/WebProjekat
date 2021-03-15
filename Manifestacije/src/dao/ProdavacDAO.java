@@ -6,45 +6,44 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import beans.Manifestacija;
 import beans.Prodavac;
 
 public class ProdavacDAO {
-	private ArrayList<Prodavac> prodavci;
+	private HashMap<String,Prodavac> prodavci;
 	
 	public ProdavacDAO() {}
 
-	public ArrayList<Prodavac> getProdavci() {
+	public HashMap<String,Prodavac> getProdavci() {
 		return prodavci;
 	}
 
-	public void setProdavci(ArrayList<Prodavac> prodavci) {
+	public void setProdavci(HashMap<String,Prodavac> prodavci) {
 		this.prodavci = prodavci;
 	}
 
 	public Prodavac nadjiProdavca(String korisnickoIme) {
-		for(Prodavac prodavac:prodavci) {
-			if(prodavac.getKorisnickoIme().equals(korisnickoIme)) {
-				return prodavac;
-			}
-		}
+		for (Map.Entry<String, Prodavac> entry : prodavci.entrySet()) {
+	        if(entry.getValue().getKorisnickoIme().equals(korisnickoIme)) {
+	        	return entry.getValue();
+	        }
+	    }		
 		return null;
 	}
 	public void obrisiProdavca(String korisnickoIme) {
-		for(Prodavac prodavac:prodavci) {
-			if(prodavac.getKorisnickoIme().equals(korisnickoIme)) {
-				prodavac.setObrisan(true);
-				break;
-			}
-		}
+		for (Map.Entry<String, Prodavac> entry : prodavci.entrySet()) {
+	        if(entry.getValue().getKorisnickoIme().equals(korisnickoIme)) {
+	        	entry.getValue().setObrisan(true);
+	        }
+	    }	
 	}
 	public void upisiProdavce() throws IOException{
 		Gson gson = new Gson();
-		FileWriter fw = new FileWriter("prodavci.json");
+		FileWriter fw = new FileWriter("files/prodavci.json");
 		gson.toJson(this.prodavci, fw);
 		fw.flush();
 		fw.close();
@@ -53,11 +52,11 @@ public class ProdavacDAO {
 	public void ucitajProdavce() throws FileNotFoundException {
 		
 		Gson gson = new Gson();
-		Type token = new TypeToken<ArrayList<Prodavac>>(){}.getType();
-		BufferedReader br = new BufferedReader(new FileReader("prodavci.json"));
+		Type token = new TypeToken<HashMap<String,Prodavac>>(){}.getType();
+		BufferedReader br = new BufferedReader(new FileReader("files/prodavci.json"));
 		this.prodavci = gson.fromJson(br, token);
 	}
-	public Prodavac nadjiProdavcaNaOsnovuManifestacije(Manifestacija manifestacija) {
+	/*public Prodavac nadjiProdavcaNaOsnovuManifestacije(ArrayList<Manifestacija> manifestacija) {
 		for(Prodavac prodavac : prodavci) {
 			for(Manifestacija m:prodavac.getManifestacije()) {
 				if(m.equals(manifestacija)) {
@@ -66,6 +65,11 @@ public class ProdavacDAO {
 			}
 		}
 		return null;
+	}*/
+	
+	public Prodavac dodajProdavca(Prodavac prodavac) {
+		prodavci.put(prodavac.getKorisnickoIme(),prodavac);
+		return prodavac;
 	}
 
 }

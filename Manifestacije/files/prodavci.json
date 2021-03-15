@@ -1,0 +1,23 @@
+{
+  
+  "kristinam": {
+    "manifestacije": [],
+    "korisnickoIme": "kristinam",
+    "lozinka": "kristina12",
+    "ime": "Kristina",
+    "prezime": "Milic",
+    "pol": "ZENSKI",
+    "datumRodjenja": "Aug 14, 1994, 12:00:00 AM",
+    "obrisan": false
+  },
+  "jovana": {
+    "manifestacije": [],
+    "korisnickoIme": "jovana",
+    "lozinka": "lala1",
+    "ime": "Jovana",
+    "prezime": "Jovanovic",
+    "pol": "ZENSKI",
+    "datumRodjenja": "May 26, 1998, 12:00:00 AM",
+    "obrisan": false
+  }
+}

@@ -1,0 +1,35 @@
+{
+  
+  "jova96": {
+    "karte": [],
+    "brojSakupljenihBodova": 0,
+    "tipKupca": {
+      "tip": "NONE",
+      "popust": 0.0,
+      "trazeniBrojBodova": 0
+    },
+    "korisnickoIme": "jova96",
+    "lozinka": "jovanm96",
+    "ime": "Jovan",
+    "prezime": "Markovic",
+    "pol": "MUSKI",
+    "datumRodjenja": "Jul 20, 1996, 12:00:00 AM",
+    "obrisan": false
+  },
+  "milicap": {
+    "karte": [],
+    "brojSakupljenihBodova": 0,
+    "tipKupca": {
+      "tip": "NONE",
+      "popust": 0.0,
+      "trazeniBrojBodova": 0
+    },
+    "korisnickoIme": "milicap",
+    "lozinka": "ananas5",
+    "ime": "Milica",
+    "prezime": "Petrovic",
+    "pol": "ZENSKI",
+    "datumRodjenja": "Oct 5, 1999, 12:00:00 AM",
+    "obrisan": false
+  }
+}

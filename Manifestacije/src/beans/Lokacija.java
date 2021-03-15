@@ -1,12 +1,21 @@
 package beans;
 
 public class Lokacija {
+	private int id;
 	private int geografskaDuzina;
 	private int geografskaSirina;
 	private Adresa adresa;
 	private boolean obrisana;
 	
 	public Lokacija() {}
+	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
 
 	public int getGeografskaDuzina() {
 		return geografskaDuzina;
@@ -38,7 +47,5 @@ public class Lokacija {
 
 	public void setObrisana(boolean obrisana) {
 		this.obrisana = obrisana;
-	}
-	
-	
+	}	
 }

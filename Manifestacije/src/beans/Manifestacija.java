@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 public class Manifestacija {
 	private int id;
 	private String naziv;
-	private String tipManifestacije;
+	private TipManifestacije tipManifestacije;
 	private int brojMesta;
 	private LocalDateTime datum;
 	private float cenaKarte;
@@ -15,14 +15,11 @@ public class Manifestacija {
 	private Prodavac prodavac;
 	private Lokacija lokacija;
 	private boolean obrisana;
+	private boolean aktivnost;
 	
-	public Manifestacija() {
-		
-	}
-	
-	
-	public Manifestacija(int id,String naziv, String tipManifestacije, int brojMesta, LocalDateTime datum, float cenaKarte,
-			boolean status, Prodavac prodavac, Lokacija lokacija, boolean obrisana, String slika) {
+	public Manifestacija() {}
+	public Manifestacija(int id,String naziv, TipManifestacije tipManifestacije, int brojMesta, LocalDateTime datum, float cenaKarte,
+			boolean status, Prodavac prodavac, Lokacija lokacija, boolean obrisana, String slika,boolean aktivnost) {
 		super();
 		this.id = id;
 		this.naziv = naziv;
@@ -35,6 +32,7 @@ public class Manifestacija {
 		this.prodavac = prodavac;
 		this.lokacija = lokacija;
 		this.obrisana = obrisana;
+		this.aktivnost = aktivnost;
 	}
 	public int getId() {
 		return id;
@@ -49,10 +47,10 @@ public class Manifestacija {
 	public void setNaziv(String naziv) {
 		this.naziv = naziv;
 	}
-	public String getTipManifestacije() {
+	public TipManifestacije getTipManifestacije() {
 		return tipManifestacije;
 	}
-	public void setTipManifestacije(String tipManifestacije) {
+	public void setTipManifestacije(TipManifestacije tipManifestacije) {
 		this.tipManifestacije = tipManifestacije;
 	}
 	public int getBrojMesta() {
@@ -112,6 +110,17 @@ public class Manifestacija {
 	public void setObrisana(boolean obrisana) {
 		this.obrisana = obrisana;
 	}
+
+
+	public boolean isAktivnost() {
+		return aktivnost;
+	}
+
+
+	public void setAktivnost(boolean aktivnost) {
+		this.aktivnost = aktivnost;
+	}
+	
 
 	
 }

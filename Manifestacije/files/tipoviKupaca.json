@@ -1,0 +1,23 @@
+{
+  
+  "srebrni": {
+    "tip": "SREBRNI",
+    "popust": 20.0,
+    "trazeniBrojBodova": 50
+  },
+  "none": {
+    "tip": "NONE",
+    "popust": 0.0,
+    "trazeniBrojBodova": 0
+  },
+  "bronzani": {
+    "tip": "BRONZANI",
+    "popust": 10.0,
+    "trazeniBrojBodova": 25
+  },
+  "zlatni": {
+    "tip": "SREBRNI",
+    "popust": 30.0,
+    "trazeniBrojBodova": 90
+  }
+}

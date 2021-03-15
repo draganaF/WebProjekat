@@ -1,0 +1,21 @@
+{
+  
+  "draganaf": {
+    "korisnickoIme": "draganaf",
+    "lozinka": "df123",
+    "ime": "Dragana",
+    "prezime": "Filipovic",
+    "pol": "ZENSKI",
+    "datumRodjenja": "Dec 24, 1998, 12:00:00 AM",
+    "obrisan": false
+  },
+  "nikolinat": {
+    "korisnickoIme": "nikolinat",
+    "lozinka": "nt456",
+    "ime": "Nikolina",
+    "prezime": "Tosic",
+    "pol": "ZENSKI",
+    "datumRodjenja": "Feb 8, 1999, 12:00:00 AM",
+    "obrisan": false
+  }
+}

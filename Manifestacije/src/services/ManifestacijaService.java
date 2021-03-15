@@ -2,6 +2,8 @@ package services;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
@@ -13,6 +15,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import beans.Lokacija;
 import beans.Manifestacija;
 import dao.ManifestacijeDAO;
 
@@ -39,7 +42,7 @@ public class ManifestacijaService {
 	@GET
 	@Path("/")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ArrayList<Manifestacija> getManifestacije(){
+	public HashMap<Integer,Manifestacija> getManifestacije(){
 		return  ((ManifestacijeDAO)ctx.getAttribute("manifestacijeDAO")).getManifestacije();
 	}
 	
@@ -48,21 +51,21 @@ public class ManifestacijaService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Manifestacija addManifestacija(Manifestacija manifestacija) {
 		ManifestacijeDAO dao = (ManifestacijeDAO) ctx.getAttribute("manifestacijeDAO");
-		ArrayList<Manifestacija> manifestacije = dao.getManifestacije();
-		for(Manifestacija m : manifestacije) {
-			if(m.getId() == manifestacija.getId() || (m.getDatum() == manifestacija.getDatum() && m.getLokacija() == manifestacija.getLokacija())) {
+		HashMap<Integer,Manifestacija> manifestacije = dao.getManifestacije();
+		for (Map.Entry<Integer, Manifestacija> entry : manifestacije.entrySet()) {
+			if(entry.getValue().getId() == manifestacija.getId() ||(entry.getValue().getDatum() == manifestacija.getDatum() && entry.getValue().getLokacija() == manifestacija.getLokacija())) {
 				return null;
 			}
 		}
-		
-		dao.getManifestacije().add(manifestacija);
+			
+		dao.getManifestacije().put(manifestacija.getId(),manifestacija);
 		try {
 			dao.upisiManifestacije();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		manifestacije.add(manifestacija);
+		manifestacije.put(manifestacija.getId(),manifestacija);
 		ctx.setAttribute("manifestacijeDAO", dao);
 		return manifestacija;
 	}
@@ -91,7 +94,7 @@ public class ManifestacijaService {
 	@GET
 	@Path("/nadjiLokacija")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ArrayList<Manifestacija> nadjiPoLokaciji(@QueryParam("lokacija") String lokacija){
+	public ArrayList<Manifestacija> nadjiPoLokaciji(@QueryParam("lokacija") Lokacija lokacija){
 		return ((ManifestacijeDAO) ctx.getAttribute("manifestacijeDAO")).nadjiPoLokaciji(lokacija);
 	}
 }

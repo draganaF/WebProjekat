@@ -16,7 +16,10 @@ import beans.Administrator;
 public class AdministratorDAO {
 	private ArrayList<Administrator> administratori;
 	
-	public AdministratorDAO() {}
+	public AdministratorDAO() throws FileNotFoundException 
+	{
+		ucitajAdministratore();
+	}
 
 	public ArrayList<Administrator> getAdministratori() {
 		return administratori;

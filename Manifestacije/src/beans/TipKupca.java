@@ -2,24 +2,24 @@ package beans;
 
 public class TipKupca {
 
-	private  String imeTipa;
+	private Tip tip;
 	private float popust;
 	private int trazeniBrojBodova;
 	
 	public TipKupca() {
 		
 	}
-	public TipKupca(String imeTipa, float popust, int trazeniBrojBodova) {
+	public TipKupca(Tip tip, float popust, int trazeniBrojBodova) {
 		super();
-		this.imeTipa = imeTipa;
+		this.tip = tip;
 		this.popust = popust;
 		this.trazeniBrojBodova = trazeniBrojBodova;
 	}
-	public String getImeTipa() {
-		return imeTipa;
+	public Tip getImeTipa() {
+		return tip;
 	}
-	public void setImeTipa(String imeTipa) {
-		this.imeTipa = imeTipa;
+	public void setImeTipa(Tip tip) {
+		this.tip = tip;
 	}
 	public float getPopust() {
 		return popust;

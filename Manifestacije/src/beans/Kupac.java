@@ -27,8 +27,4 @@ public class Kupac extends Korisnik {
 		this.karte = karte;
 	}
 	
-	
-	
-	
-
 }

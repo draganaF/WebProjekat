@@ -3,7 +3,8 @@ package beans;
 import java.util.Date;
 
 public abstract class Korisnik {
-	private String korisnickoIme,lozinka,ime,prezime,pol;
+	private String korisnickoIme,lozinka,ime,prezime;
+	private Pol pol;
 	private Date datumRodjenja;
 	private boolean obrisan;
 	public String getKorisnickoIme() {
@@ -30,10 +31,10 @@ public abstract class Korisnik {
 	public void setPrezime(String prezime) {
 		this.prezime = prezime;
 	}
-	public String getPol() {
+	public Pol getPol() {
 		return pol;
 	}
-	public void setPol(String pol) {
+	public void setPol(Pol pol) {
 		this.pol = pol;
 	}
 	public Date getDatumRodjenja() {

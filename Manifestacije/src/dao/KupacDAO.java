@@ -7,6 +7,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -16,68 +18,70 @@ import beans.TipKupca;
 
 public class KupacDAO {
 	
-	private ArrayList<Kupac> kupci;
+	private HashMap<String,Kupac> kupci;
 	
-	public KupacDAO() {}
+	public KupacDAO() throws FileNotFoundException {
+		ucitajKupce();
+	}
 
-	public ArrayList<Kupac> getKupci() {
+	public HashMap<String,Kupac> getKupci() {
 		return kupci;
 	}
 
-	public void setKupci(ArrayList<Kupac> kupci) {
+	public void setKupci(HashMap<String,Kupac> kupci) {
 		this.kupci = kupci;
 	}
 	
 	public Kupac nadjiKupca(String korisnickoIme) {
-		for(Kupac kupac:kupci) {
-			if(kupac.getKorisnickoIme().equals(korisnickoIme)) {
-				return kupac;
-			}
+		if(kupci.containsKey(korisnickoIme)) {
+			return kupci.get(korisnickoIme);
+		}else {
+			return null;
 		}
-		return null;
 	}
 	public void obrisiKupca(String korisnickoIme) {
-		for(Kupac kupac:kupci) {
-			if(kupac.getKorisnickoIme().equals(korisnickoIme)) {
-				kupac.setObrisan(true);
-				break;
-			}
+		if(kupci.containsKey(korisnickoIme)) {
+			kupci.get(korisnickoIme).setObrisan(true);
 		}
 	}
 	public void upisiKupce() throws IOException{
 		Gson gson = new Gson();
-		FileWriter fw = new FileWriter("kupci.json");
+		FileWriter fw = new FileWriter("files/kupci.json");
 		gson.toJson(this.kupci, fw);
 		fw.flush();
 		fw.close();
 	}
 	
+	public Kupac dodajKupca(Kupac kupac) {
+		kupci.put(kupac.getKorisnickoIme(),kupac);
+		return kupac;
+	}
+	
 	public void ucitajKupce() throws FileNotFoundException {
 		
 		Gson gson = new Gson();
-		Type token = new TypeToken<ArrayList<Kupac>>(){}.getType();
-		BufferedReader br = new BufferedReader(new FileReader("kupci.json"));
+		Type token = new TypeToken<HashMap<String,Kupac>>(){}.getType();
+		BufferedReader br = new BufferedReader(new FileReader("files/kupci.json"));
 		this.kupci = gson.fromJson(br, token);
 	}
 	
 	public ArrayList<Kupac> nadjiSveKupceOdredjenogTipa(TipKupca tip){
 		ArrayList<Kupac> lista = new ArrayList<Kupac>();
-		for(Kupac kupac:kupci) {
-			if(kupac.getTipKupca().equals(tip)) {
-				lista.add(kupac);
+		for (Map.Entry<String, Kupac> entry : kupci.entrySet()) {
+			if(entry.getValue().getTipKupca().equals(tip)) {
+				lista.add(entry.getValue());
 			}
-		}
+	    }	
 		return lista;
 	}
-	
 	public Kupac nadjiKupcaNaOsnovuKarte(Karta karta) {
-		for(Kupac kupac:kupci) {
-			for(Karta k :kupac.getKarte()) {
+		for (Map.Entry<String, Kupac> entry : kupci.entrySet()) {
+			for(Karta k : entry.getValue().getKarte()) {
 				if(k.equals(karta)) {
-					return kupac;
+					return entry.getValue();
 				}
 			}
-		}
+	    }	
 		return null;
 	}
 

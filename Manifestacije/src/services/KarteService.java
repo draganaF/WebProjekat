@@ -14,6 +14,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import beans.Karta;
+import beans.TipKarte;
 import dao.KartaDAO;
 
 
@@ -95,7 +96,7 @@ public class KarteService {
 	@GET
 	@Path("/nadjiPoTipu")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ArrayList<Karta> nadjiPoTipu(@QueryParam("tip") String tip){
+	public ArrayList<Karta> nadjiPoTipu(@QueryParam("tip") TipKarte tip){
 		KartaDAO dao = (KartaDAO) ctx.getAttribute("karteDAO");
 		return dao.nadjiPoTipu(tip);
 	}
