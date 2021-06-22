@@ -14,7 +14,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import beans.Karta;
-import beans.Korisnik;
 import beans.Kupac;
 import beans.Tip;
 import beans.TipKupca;
@@ -25,7 +24,7 @@ public class KupacDAO {
 	
 	public KupacDAO() {
 		
-		kupci = new HashMap<String, Kupac>();
+		kupci = new HashMap<String,Kupac>();
 		try {
 			ucitajKupce();
 		} catch (FileNotFoundException e) {
@@ -42,17 +41,20 @@ public class KupacDAO {
 		this.kupci = kupci;
 	}
 	
-	public Kupac nadjiKupca(String korisnickoIme) {
-		if(kupci.containsKey(korisnickoIme)) {
-			return kupci.get(korisnickoIme);
-		}else {
-			return null;
-		}
+	public Kupac nadjiKupca(String korisnickoIme, String lozinka) {
+		for (Map.Entry<String, Kupac> entry : kupci.entrySet()) {
+	        if(entry.getValue().getKorisnickoIme().equals(korisnickoIme) && entry.getValue().getLozinka().equals(lozinka) ) {
+	        	return entry.getValue();
+	        }
+	    }
+		return null;
 	}
 	public void obrisiKupca(String korisnickoIme) {
-		if(kupci.containsKey(korisnickoIme)) {
-			kupci.get(korisnickoIme).setObrisan(true);
-		}
+		for (Map.Entry<String, Kupac> entry : kupci.entrySet()) {
+	        if(entry.getValue().getKorisnickoIme().equals(korisnickoIme) ) {
+	        	entry.getValue().setObrisan(true);;
+	        }
+	    }
 	}
 	public void upisiKupce() throws IOException{
 		Gson gson = new Gson();
@@ -92,20 +94,19 @@ public class KupacDAO {
 	public ArrayList<Kupac> nadjiSveKupceOdredjenogTipa(TipKupca tip){
 		ArrayList<Kupac> lista = new ArrayList<Kupac>();
 		for (Map.Entry<String, Kupac> entry : kupci.entrySet()) {
-			if(entry.getValue().getTipKupca().equals(tip)) {
-				lista.add(entry.getValue());
-			}
-	    }	
+	        if(entry.getValue().getTipKupca().equals(tip) ) {
+	        	lista.add(entry.getValue());
+	        }
+	    }
 		return lista;
 	}
 	public Kupac nadjiKupcaNaOsnovuKarte(Karta karta) {
 		for (Map.Entry<String, Kupac> entry : kupci.entrySet()) {
-			for(Karta k : entry.getValue().getKarte()) {
-				if(k.equals(karta)) {
-					return entry.getValue();
-				}
-			}
-	    }	
+			for(Karta k : entry.getValue().getKarte())
+	        if(k.equals(karta) ) {
+	        	return entry.getValue();
+	        }
+	    }
 		return null;
 	}
 
