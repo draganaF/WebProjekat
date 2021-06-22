@@ -48,6 +48,15 @@ public class AdministratorDAO {
 	    }	
 		return null;
 	}
+	
+	public Administrator nadjiAdministratoraProfil(String korisnickoIme) {
+		for (Map.Entry<String, Administrator> entry : administratori.entrySet()) {
+	        if(entry.getValue().getKorisnickoIme().equals(korisnickoIme)) {
+	        	return entry.getValue();
+	        }
+	    }	
+		return null;
+	}
 	public void obrisiAdministratora(String korisnickoIme) {
 		for (Map.Entry<String, Administrator> entry : administratori.entrySet()) {
 	        if(entry.getValue().getKorisnickoIme().equals(korisnickoIme)) {
@@ -70,6 +79,41 @@ public class AdministratorDAO {
 		Type token = new TypeToken<HashMap<String,Administrator>>(){}.getType();
 		BufferedReader br = new BufferedReader(new FileReader("files/administratori.json"));
 		this.administratori = gson.fromJson(br, token);
+	}
+	
+	public void izmeniAdministratora(String korisnickoIme, Administrator administrator) {
+		for (Map.Entry<String, Administrator> entry : administratori.entrySet()) {
+	        if(entry.getValue().getKorisnickoIme().equals(korisnickoIme)) {
+	        	entry.getValue().setIme(administrator.getIme());
+	        	entry.getValue().setPol(administrator.getPol());
+	        	entry.getValue().setPrezime(administrator.getPrezime());
+	        }
+	    }
+		
+		try {
+			upisiAdministratore();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public void izmeniLozinku(String korisnickoIme, String lozinka) {
+		for (Map.Entry<String, Administrator> entry : administratori.entrySet()) {
+	        if(entry.getValue().getKorisnickoIme().equals(korisnickoIme)) {
+	        	entry.getValue().setLozinka(lozinka);
+	        	
+	        }
+	    }
+		
+		try {
+			upisiAdministratore();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 }

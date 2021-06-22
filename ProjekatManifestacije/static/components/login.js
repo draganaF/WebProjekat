@@ -20,10 +20,8 @@ Vue.component("login", {
                     
                 }
                 else{
-                    alert("TOOOO");
                     localStorage.setItem('kIme', JSON.parse(JSON.stringify(response.data))[0]);
                     localStorage.setItem("role", JSON.parse(JSON.stringify(response.data))[1]);
-                    
                     e.target.submit();
                 }
               });
@@ -31,20 +29,16 @@ Vue.component("login", {
           },
   
     },
-    template: ` 
-    <div class="wrapper fadeInDown">
+    template: 
+    ` <div class="wrapper fadeInDown">
         <div id="formContent">
-    <form @submit="login">
-      <input type="text" id="login" class="fadeIn second" name="login" placeholder="Korisnicko ime" v-model="username">
-      <input type="password" id="password" class="fadeIn third" name="login" placeholder="Lozinka" v-model="password">
-      <input type="submit" value="Prijavi se">
-    </form>
-
-  </div>
-</div>
-  
-      
-      `
+            <form @submit="login">
+                <input type="text" id="login" class="fadeIn second" name="login" placeholder="Korisnicko ime" v-model="username">
+                <input type="password" id="password" class="fadeIn third" name="login" placeholder="Lozinka" v-model="password">
+                <input type="submit" value="Prijavi se">
+            </form>
+        </div>
+    </div>   `
     ,
     
   });
