@@ -15,7 +15,10 @@ import com.google.gson.GsonBuilder;
 import beans.Kupac;
 
 import dao.AdministratorDAO;
+import dao.KomentarDAO;
 import dao.KupacDAO;
+import dao.LokacijaDAO;
+import dao.ManifestacijeDAO;
 import dao.ProdavacDAO;
 
 public class ProjekatManifestacijeMain  {
@@ -24,12 +27,19 @@ public class ProjekatManifestacijeMain  {
 	private static KupacDAO kupacDAO = new KupacDAO();
 	private static AdministratorDAO administratorDAO = new AdministratorDAO();
 	private static ProdavacDAO prodavacDAO = new ProdavacDAO();
+	private static ManifestacijeDAO manifestacijeDAO = new ManifestacijeDAO();
+	private static LokacijaDAO lokacijeDAO = new LokacijaDAO();
+	private static KomentarDAO komentariDAO = new KomentarDAO();
 	
 	public static void main(String[] args) throws IOException {
 		port(8080);
 		
 		
 		staticFiles.externalLocation(new File("./static").getCanonicalPath());
+		
+		get("/manifestations", (req, res) -> {
+			return g.toJson(manifestacijeDAO.getManifestacije().values());
+		});
 		
 		post("/registration", (req, res)-> {
 			String reqBody = req.body();
@@ -70,8 +80,25 @@ public class ProjekatManifestacijeMain  {
 			
 		});
 		
+		get("/searchManifestations", (req, res) -> {
+			String filterAvaible = (req.queryParams("filterAvaiable")).strip();
+			String filterType = (req.queryParams("filterType")).strip();
+			String searchDateFrom = (req.queryParams("searchDateFrom")).strip();
+			String searchDateTo = (req.queryParams("searchDateTo")).strip();
+			String searchPriceFrom = (req.queryParams("searchPriceFrom")).strip();
+			String searchPriceTo = (req.queryParams("searchPriceTo")).strip();
+			String searchLocation = (req.queryParams("searchLocation")).strip();
+			String searchName = (req.queryParams("searchName")).strip();
+			return g.toJson(manifestacijeDAO.pretraga(filterAvaible, filterType, searchName, searchLocation, searchPriceFrom, searchPriceTo, searchDateFrom, searchDateTo));
+		});
 		
-
+		get("/manifestationLocations", (req, res) -> {
+			return g.toJson(lokacijeDAO.getLokacije().values());
+		});
+		
+		get("/comments", (req, res) -> {
+			return g.toJson(komentariDAO.getKomentari().values());
+		});
 	}
 
 }

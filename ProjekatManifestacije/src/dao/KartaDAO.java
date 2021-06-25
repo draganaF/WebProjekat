@@ -60,7 +60,7 @@ public class KartaDAO {
 		
 		ArrayList<Karta> validne = new ArrayList<Karta>();
 		for(Karta k : karte) {
-			if(!k.isObrisana() && k.getManifestacija().getProdavac().getKorisnickoIme().equalsIgnoreCase(korisnickoIme)) {
+			if(!k.isObrisana() && k.getManifestacija().getProdavac().equalsIgnoreCase(korisnickoIme)) {
 				validne.add(k);
 			}
 		}
