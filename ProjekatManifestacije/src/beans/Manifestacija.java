@@ -1,6 +1,5 @@
 package beans;
 import java.util.Date;
-
 import javax.json.bind.annotation.JsonbDateFormat;
 
 public class Manifestacija {
@@ -130,7 +129,6 @@ public class Manifestacija {
     public void setSlobodnaMesta(int slobodnaMesta) {
         this.slobodnaMesta = slobodnaMesta;
     }
-    
-
-    
+ 
 }
+

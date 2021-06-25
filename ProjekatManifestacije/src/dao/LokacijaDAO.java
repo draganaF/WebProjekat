@@ -14,11 +14,21 @@ import com.google.gson.reflect.TypeToken;
 
 import beans.Adresa;
 import beans.Lokacija;
+import beans.Prodavac;
 
 public class LokacijaDAO {
 	private HashMap<Integer,Lokacija> lokacije;
 	
-	public LokacijaDAO() {}
+	public LokacijaDAO() {
+		lokacije = new HashMap<Integer,Lokacija>();
+		
+		try {
+			ucitajLokacije();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	public HashMap<Integer,Lokacija> getLokacije() {
 		return lokacije;
@@ -57,6 +67,8 @@ public class LokacijaDAO {
 		Type token = new TypeToken<HashMap<Integer,Lokacija>>(){}.getType();
 		BufferedReader br = new BufferedReader(new FileReader("files/lokacije.json"));
 		this.lokacije = gson.fromJson(br, token);
+		
+		System.out.println(lokacije.get(1).getAdresa().getDrzava());
 	}
 
 }

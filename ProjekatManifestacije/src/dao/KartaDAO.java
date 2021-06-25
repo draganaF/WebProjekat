@@ -88,7 +88,11 @@ public class KartaDAO {
 		
 		ArrayList<Karta> validne = new ArrayList<Karta>();
 		for(Karta k : karte) {
+<<<<<<< HEAD
 			if(!k.isObrisana() && k.getManifestacija()(korisnickoIme)) {
+=======
+			if(!k.isObrisana() && k.getManifestacija().getProdavac().equalsIgnoreCase(korisnickoIme)) {
+>>>>>>> b0aed92daf20727a6c2f6ba9e555dbe4b54d8196
 				validne.add(k);
 			}
 		}

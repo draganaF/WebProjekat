@@ -97,7 +97,7 @@ public class ProdavacDAO {
 	}*/
 	
 	public Prodavac dodajProdavca(Prodavac prodavac) {
-		prodavac.setManifestacije(new ArrayList<Manifestacija>());
+		prodavac.setManifestacije(new ArrayList<Integer>());
 		prodavac.setObrisan(false);
 		prodavci.put(prodavac.getKorisnickoIme(),prodavac);
 		try {
