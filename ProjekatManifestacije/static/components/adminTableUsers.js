@@ -188,7 +188,7 @@ Vue.component("adminTableUsers", {
                 var temp;
                 for(var i=0;i<this.users.length;i++){
                     for(var j=0;j<this.users.length-1;j++){
-                        if(this.sort_name ==="ascending"){
+                        if(this.sortIme ==="ascending"){
                             
                             if(this.users[j].name < this.users[j+1].name){
                                 temp = this.users[j];

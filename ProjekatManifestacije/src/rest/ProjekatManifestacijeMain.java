@@ -16,6 +16,7 @@ import com.google.gson.GsonBuilder;
 import beans.Administrator;
 import beans.Korisnik;
 import beans.Kupac;
+import beans.Manifestacija;
 import beans.Prodavac;
 import beans.Karta;
 import dao.AdministratorDAO;
@@ -344,8 +345,28 @@ public class ProjekatManifestacijeMain  {
 		});
 		
 		get("/comments", (req, res) -> {
-			return g.toJson(komentariDAO.getKomentari().values());
+			return g.toJson(komentariDAO.getMapaKomentara().values());
 		});
+		
+		post("/manifestationsActivation", (req, res)-> {
+			String id =  req.queryParams("id");
+			String aktivacija = req.queryParams("activation");
+			Manifestacija m = null;
+			m = manifestacijeDAO.nadjiManifestaciju(Integer.parseInt(id));
+			if(m == null) {
+				return false;
+			}else {
+				if(aktivacija.equals("p")) {
+					manifestacijeDAO.postaviAktivnost(Integer.parseInt(id));
+				}else {
+					manifestacijeDAO.obrisiManifestaciju(Integer.parseInt(id));
+				}
+			}
+			return true;
+			
+		});
+		
+		
 	}
 
 }
