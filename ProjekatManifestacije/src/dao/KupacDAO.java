@@ -48,12 +48,52 @@ public class KupacDAO {
 	    }
 		return null;
 	}
+	
+	public Kupac nadjiKupcaProfil(String korisnickoIme) {
+		for (Map.Entry<String, Kupac> entry : kupci.entrySet()) {
+	        if(entry.getValue().getKorisnickoIme().equals(korisnickoIme) ) {
+	        	return entry.getValue();
+	        }
+	    }
+		return null;
+	}
+	
 	public void obrisiKupca(String korisnickoIme) {
 		for (Map.Entry<String, Kupac> entry : kupci.entrySet()) {
 	        if(entry.getValue().getKorisnickoIme().equals(korisnickoIme) ) {
-	        	entry.getValue().setObrisan(true);;
+	        	entry.getValue().setObrisan(true);
 	        }
 	    }
+	}
+	
+	public void izmeniKupca(String korisnickoIme, Kupac kupac) {
+		for (Map.Entry<String, Kupac> entry : kupci.entrySet()) {
+	        if(entry.getValue().getKorisnickoIme().equals(korisnickoIme) ) {
+	        	entry.getValue().setIme(kupac.getIme());
+	        	entry.getValue().setPrezime(kupac.getPrezime());
+	        	entry.getValue().setPol(kupac.getPol());
+	        }
+	    }
+		try {
+			upisiKupce();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void izmeniLozinku(String korisnickoIme, String lozinka) {
+		for (Map.Entry<String, Kupac> entry : kupci.entrySet()) {
+	        if(entry.getValue().getKorisnickoIme().equals(korisnickoIme) ) {
+	        	entry.getValue().setLozinka(lozinka);	
+	        }
+	    }
+		try {
+			upisiKupce();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	public void upisiKupce() throws IOException{
 		Gson gson = new Gson();

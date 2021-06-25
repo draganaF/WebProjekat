@@ -19,5 +19,13 @@
     "pol": "ZENSKI",
     "datumRodjenja": "May 26, 1998, 12:00:00 AM",
     "obrisan": false
-  }
+  },
+"steva@gmail.com":{
+	"manifestacije":[],
+	"korisnickoIme":"steva@gmail.com",
+	"lozinka":"123",
+	"ime":"steva",
+	"prezime":"stevic",
+	"datumRodjenja":"Jun 24, 2021, 12:00:00 AM",
+	"obrisan":false}
 }

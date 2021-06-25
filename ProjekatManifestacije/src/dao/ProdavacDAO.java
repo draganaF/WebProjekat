@@ -6,12 +6,14 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import beans.Manifestacija;
 import beans.Prodavac;
 
 public class ProdavacDAO {
@@ -41,6 +43,15 @@ public class ProdavacDAO {
 	public Prodavac nadjiProdavca(String korisnickoIme, String lozinka) {
 		for (Map.Entry<String, Prodavac> entry : prodavci.entrySet()) {
 	        if(entry.getValue().getKorisnickoIme().equals(korisnickoIme) && entry.getValue().getLozinka().equals(lozinka)) {
+	        	return entry.getValue();
+	        }
+	    }		
+		return null;
+	}
+	
+	public Prodavac nadjiProdavcaProfil(String korisnickoIme) {
+		for (Map.Entry<String, Prodavac> entry : prodavci.entrySet()) {
+	        if(entry.getValue().getKorisnickoIme().equals(korisnickoIme)) {
 	        	return entry.getValue();
 	        }
 	    }		
@@ -80,8 +91,49 @@ public class ProdavacDAO {
 	}*/
 	
 	public Prodavac dodajProdavca(Prodavac prodavac) {
+		prodavac.setManifestacije(new ArrayList<Integer>());
+		prodavac.setObrisan(false);
 		prodavci.put(prodavac.getKorisnickoIme(),prodavac);
+		try {
+			upisiProdavce();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return prodavac;
+	}
+	
+	public void izmeniProdavca(String korisnickoIme, Prodavac prodavac) {
+		for (Map.Entry<String, Prodavac> entry : prodavci.entrySet()) {
+	        if(entry.getValue().getKorisnickoIme().equals(korisnickoIme)) {
+	        	entry.getValue().setIme(prodavac.getIme());
+	        	entry.getValue().setPrezime(prodavac.getPrezime());
+	        	entry.getValue().setPol(prodavac.getPol());
+	        }
+	    }	
+		try {
+			upisiProdavce();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public void izmeniLozinku(String korisnickoIme, String lozinka) {
+		for (Map.Entry<String, Prodavac> entry : prodavci.entrySet()) {
+	        if(entry.getValue().getKorisnickoIme().equals(korisnickoIme)) {
+	        	entry.getValue().setLozinka(lozinka);
+	        	
+	        }
+	    }	
+		try {
+			upisiProdavce();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 }

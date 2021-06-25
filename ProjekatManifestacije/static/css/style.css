@@ -285,3 +285,9 @@ input[type=text]:placeholder {
     outline: none;
 } 
 
+.set-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
