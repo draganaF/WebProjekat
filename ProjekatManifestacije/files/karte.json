@@ -1,0 +1,52 @@
+[
+  {
+    "id": "alsrlvfowp",
+    "manifestacija": 1,
+    "datumOtkazivanja": "Jul 20, 2021, 06:00:00 PM",
+    "cena": 1200.0,
+    "status": false,
+    "tipKarte": "REGULAR",
+    "obrisana": false,
+    "kupac": "nikolinatosic999@gmail.com"
+  },
+  {
+    "id": "zemhsjyffy",
+    "manifestacija": 2,
+    "datumOtkazivanja": "Jul 10, 2021, 03:00:00 PM",
+    "cena": 4000.0,
+    "status": false,
+    "tipKarte": "REGULAR",
+    "obrisana": false,
+    "kupac": "nikolinatosic999@gmail.com"
+  },
+  {
+    "id": "czrrgwhewx",
+    "manifestacija": 4,
+    "datumOtkazivanja": "Jul 18, 2021, 08:00:00 PM",
+    "cena": 4000.0,
+    "status": false,
+    "tipKarte": "REGULAR",
+    "obrisana": false,
+    "kupac": "nikolinatosic999@gmail.com"
+  },
+  {
+    "id": "triyovquly",
+    "manifestacija": 3,
+    "datumOtkazivanja": "Apr 20, 2021, 08:00:00 PM",
+    "cena": 1000,
+    "status": false,
+    "tipKarte": "REGULAR",
+    "obrisana": false,
+    "kupac": "nikolinatosic999@gmail.com"
+  }, {
+  
+  	"id": "tsrdyovquky",
+  	"manifestacija": 2,
+    "datumOtkazivanja": "Jul 13, 2021, 08:00:00 PM",
+    "cena": 4000.0,
+    "status": false,
+    "tipKarte": "REGULAR",
+    "obrisana": false,
+    "kupac": "nikolinatosic999@gmail.com"
+  }
+]

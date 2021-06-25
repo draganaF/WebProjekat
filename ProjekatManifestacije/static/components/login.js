@@ -18,6 +18,9 @@ Vue.component("login", {
                 if(JSON.parse(JSON.stringify(response.data))[0]===" "){
                     alert("Pogresno korisnicko ime ili lozinka")
                     
+                }else if(JSON.parse(JSON.stringify(response.data))[0]==="blokiran"){
+                    alert("Vas nalog je blokiran")
+                    
                 }
                 else{
                     localStorage.setItem('kIme', JSON.parse(JSON.stringify(response.data))[0]);
