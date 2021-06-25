@@ -6,14 +6,16 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.time.Duration;
 import java.util.ArrayList;
-
+import java.util.Collections;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import beans.Karta;
 import beans.TipKarte;
+import sorter.KartaSorter;
 
 public class KartaDAO {
 	private ArrayList<Karta> karte;
@@ -48,7 +50,7 @@ public class KartaDAO {
 	public ArrayList<Karta> karteKupca(String korisnickoIme){
 		ArrayList<Karta> validne = new ArrayList<Karta>();
 		for(Karta k : karte) {
-			if(!k.isObrisana() && k.getKupac().getKorisnickoIme().equalsIgnoreCase(korisnickoIme)) {
+			if(!k.isObrisana() && k.getKupac().equalsIgnoreCase(korisnickoIme)) {
 				validne.add(k);
 			}
 		}
@@ -56,22 +58,48 @@ public class KartaDAO {
 		return validne;
 	}
 	
-	public ArrayList<Karta> kartePoslovca(String korisnickoIme){
+	public ArrayList<Karta> karteKupcaSumnjivi(String korisnickoIme){
+		ArrayList<Karta> validne = karteKupca(korisnickoIme);
+		ArrayList<Karta> karteUMesecDana = new ArrayList<Karta>();
+		for(Karta k : validne) {
+			// status odustanak
+			if(!k.isStatus()) {
+				
+				karteUMesecDana.add(k);
+			}
+			
+		}
+		
+		if(karteUMesecDana.size() == 5) {
+			
+			Collections.sort(karteUMesecDana, new KartaSorter());
+			long value = karteUMesecDana.get(karteUMesecDana.size()-1).getDatumOtkazivanja().getTime() -  karteUMesecDana.get(0).getDatumOtkazivanja().getTime();
+			int days = (int) (value / (1000*60*60*24));
+			if(days <= 31 || days <= 30) {
+				return karteUMesecDana;
+			}
+		}
+		
+		return null;
+		
+	}
+	
+	/*public ArrayList<Karta> kartePoslovca(String korisnickoIme){
 		
 		ArrayList<Karta> validne = new ArrayList<Karta>();
 		for(Karta k : karte) {
-			if(!k.isObrisana() && k.getManifestacija().getProdavac().getKorisnickoIme().equalsIgnoreCase(korisnickoIme)) {
+			if(!k.isObrisana() && k.getManifestacija()(korisnickoIme)) {
 				validne.add(k);
 			}
 		}
 		
 		return validne;
-	}
+	}*/
 	public ArrayList<Karta> karteManifestacije(int idM){
 		
 		ArrayList<Karta> validne = new ArrayList<Karta>();
 		for(Karta k : karte) {
-			if(!k.isObrisana() && k.getManifestacija().getId()==idM) {
+			if(!k.isObrisana() && k.getManifestacija() ==idM) {
 				validne.add(k);
 			}
 		}
@@ -127,7 +155,7 @@ public class KartaDAO {
 
 	public void upisiKarte() throws IOException{
 		Gson gson = new Gson();
-		FileWriter fw = new FileWriter("karte.json");
+		FileWriter fw = new FileWriter("files/karte.json");
 		gson.toJson(this.karte, fw);
 		fw.flush();
 		fw.close();
@@ -137,7 +165,7 @@ public class KartaDAO {
 		
 		Gson gson = new Gson();
 		Type token = new TypeToken<ArrayList<Karta>>(){}.getType();
-		BufferedReader br = new BufferedReader(new FileReader("karte.json"));
+		BufferedReader br = new BufferedReader(new FileReader("files/karte.json"));
 		this.karte = gson.fromJson(br, token);
 	}
 }

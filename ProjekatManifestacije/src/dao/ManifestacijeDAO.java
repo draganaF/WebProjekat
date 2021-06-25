@@ -43,7 +43,7 @@ public class ManifestacijeDAO {
 	    }		
 		return validne;
 	}
-	public ArrayList<Manifestacija> nadjiPoDatumu(LocalDateTime odDatum, LocalDateTime doDatum){
+	/*public ArrayList<Manifestacija> nadjiPoDatumu(LocalDateTime odDatum, LocalDateTime doDatum){
 
 		ArrayList<Manifestacija> validne = new ArrayList<Manifestacija>();
 		for (Map.Entry<Integer, Manifestacija> entry : manifestacije.entrySet()) {
@@ -52,7 +52,7 @@ public class ManifestacijeDAO {
 	        }
 	    }		
 		return validne;
-	}
+	}*/
 	
 	public ArrayList<Manifestacija> nadjiManifestacije(String naziv) {
 		ArrayList<Manifestacija> validne = new ArrayList<Manifestacija>();
@@ -74,7 +74,7 @@ public class ManifestacijeDAO {
 		return validne;
 	}
 	
-	public ArrayList<Manifestacija> nadjiPoLokaciji(Lokacija lokacija){
+	/*public ArrayList<Manifestacija> nadjiPoLokaciji(Lokacija lokacija){
 		ArrayList<Manifestacija> validne =new ArrayList<Manifestacija>();
 		for (Map.Entry<Integer, Manifestacija> entry : manifestacije.entrySet()) {
 	        if(!entry.getValue().isObrisana() && entry.getValue().getLokacija() == lokacija ) {
@@ -83,7 +83,7 @@ public class ManifestacijeDAO {
 	    }		
 		return validne;
 	}
-	
+	*/
 	public void obrisiManifestaciju(String naziv) {
 		for (Map.Entry<Integer, Manifestacija> entry : manifestacije.entrySet()) {
 	        if(entry.getValue().getNaziv().equalsIgnoreCase(naziv)) {

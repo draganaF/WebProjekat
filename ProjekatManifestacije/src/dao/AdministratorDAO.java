@@ -62,7 +62,13 @@ public class AdministratorDAO {
 	        if(entry.getValue().getKorisnickoIme().equals(korisnickoIme)) {
 	        	entry.getValue().setObrisan(true);
 	        }
-	    }		
+	    }	
+		try {
+			upisiAdministratore();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 	public void upisiAdministratore() throws IOException{

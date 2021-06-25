@@ -63,6 +63,12 @@ public class ProdavacDAO {
 	        	entry.getValue().setObrisan(true);
 	        }
 	    }	
+		try {
+			upisiProdavce();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	public void upisiProdavce() throws IOException{
 		Gson gson = new Gson();

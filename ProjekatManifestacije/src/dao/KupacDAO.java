@@ -12,8 +12,6 @@ import java.util.Map;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
-import beans.Karta;
 import beans.Kupac;
 import beans.Tip;
 import beans.TipKupca;
@@ -107,9 +105,9 @@ public class KupacDAO {
 	public Kupac dodajKupca(Kupac kupac) {
 		kupac.setBrojSakupljenihBodova(0);
 		kupac.setObrisan(false);
-		kupac.setKarte(new ArrayList<Karta>());
+		kupac.setKarte(new ArrayList<String>());
 		TipKupca tip = new TipKupca();
-		tip.setImeTipa(Tip.NONE);
+		tip.setImeTipa(Tip.OBICAN);
 		tip.setPopust(0);
 		tip.setTrazeniBrojBodova(0);
 		kupac.setTipKupca(tip);
@@ -140,7 +138,7 @@ public class KupacDAO {
 	    }
 		return lista;
 	}
-	public Kupac nadjiKupcaNaOsnovuKarte(Karta karta) {
+	/*public Kupac nadjiKupcaNaOsnovuKarte(Karta karta) {
 		for (Map.Entry<String, Kupac> entry : kupci.entrySet()) {
 			for(Karta k : entry.getValue().getKarte())
 	        if(k.equals(karta) ) {
@@ -148,7 +146,25 @@ public class KupacDAO {
 	        }
 	    }
 		return null;
+	}*/
+	
+	public void podesiSumnjive(ArrayList<Kupac> noviKupci) {
+		for (Map.Entry<String, Kupac> entry : kupci.entrySet()) {
+			for(Kupac k : noviKupci) {
+				if(k.getKorisnickoIme().equals(entry.getValue().getKorisnickoIme())) {
+					if(k.isSumnjiv()) {
+						entry.getValue().setSumnjiv(true);
+					}
+				}
+			}
+	        	
+	        }
+		try {
+			upisiKupce();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    }
 	}
 
-
-}

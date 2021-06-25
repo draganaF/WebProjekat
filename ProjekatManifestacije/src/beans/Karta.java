@@ -1,24 +1,28 @@
 package beans;
 
 import java.time.LocalDateTime;
+import java.util.Date;
+
+import javax.json.bind.annotation.JsonbDateFormat;
 
 public class Karta {
 
 	private String id;
-	private Manifestacija manifestacija;
+	private int manifestacija;
 	private float cena;
 	private boolean status;
 	private TipKarte tipKarte;
-	private LocalDateTime datumOtkazivanja;
-	private Kupac kupac;
+	@JsonbDateFormat(JsonbDateFormat.TIME_IN_MILLIS)
+	private Date datumOtkazivanja;
+	private String kupac;
 	private boolean obrisana;
 	
 	public Karta() {
 		
 	}
 
-	public Karta(String id, Manifestacija manifestacija, float cena, boolean status, TipKarte tipKarte,
-			LocalDateTime datumOtkazivanja, Kupac kupac, boolean obrisana) {
+	public Karta(String id, int manifestacija, float cena, boolean status, TipKarte tipKarte,
+			Date datumOtkazivanja, String kupac, boolean obrisana) {
 		super();
 		this.id = id;
 		this.manifestacija = manifestacija;
@@ -38,11 +42,11 @@ public class Karta {
 		this.id = id;
 	}
 
-	public Manifestacija getManifestacija() {
+	public int getManifestacija() {
 		return manifestacija;
 	}
 
-	public void setManifestacija(Manifestacija manifestacija) {
+	public void setManifestacija(int manifestacija) {
 		this.manifestacija = manifestacija;
 	}
 
@@ -70,19 +74,19 @@ public class Karta {
 		this.tipKarte = tipKarte;
 	}
 
-	public LocalDateTime getDatumOtkazivanja() {
+	public Date getDatumOtkazivanja() {
 		return datumOtkazivanja;
 	}
 
-	public void setDatumOtkazivanja(LocalDateTime datumOtkazivanja) {
+	public void setDatumOtkazivanja(Date datumOtkazivanja) {
 		this.datumOtkazivanja = datumOtkazivanja;
 	}
 
-	public Kupac getKupac() {
+	public String getKupac() {
 		return kupac;
 	}
 
-	public void setKupac(Kupac kupac) {
+	public void setKupac(String kupac) {
 		this.kupac = kupac;
 	}
 
