@@ -3,8 +3,8 @@ package beans;
 public class Komentar {
 
 	private int id;
-	private Kupac kupac;
-	private Manifestacija manifestacija;
+	private String kupac;
+	private int manifestacija;
 	private String teskt;
 	private int ocena;
 	private boolean odobrena;
@@ -14,7 +14,7 @@ public class Komentar {
 		
 	}
 
-	public Komentar(int id, Kupac kupac, Manifestacija manifestacija, String teskt, int ocena, boolean odobrena,
+	public Komentar(int id, String kupac, int manifestacija, String teskt, int ocena, boolean odobrena,
 			boolean obrisan) {
 		super();
 		this.id = id;
@@ -26,19 +26,19 @@ public class Komentar {
 		this.obrisan = obrisan;
 	}
 
-	public Kupac getKupac() {
+	public String getKupac() {
 		return kupac;
 	}
 
-	public void setKupac(Kupac kupac) {
+	public void setKupac(String kupac) {
 		this.kupac = kupac;
 	}
 
-	public Manifestacija getManifestacija() {
+	public int getManifestacija() {
 		return this.manifestacija;
 	}
 
-	public void setManifestacija(Manifestacija manifestacija) {
+	public void setManifestacija(int manifestacija) {
 		this.manifestacija = manifestacija;
 	}
 
