@@ -89,13 +89,40 @@ public class ManifestacijeDAO {
 		return validne;
 	}
 	*/
-	public void obrisiManifestaciju(String naziv) {
+	public Manifestacija nadjiManifestaciju(int id){
+
 		for (Map.Entry<Integer, Manifestacija> entry : manifestacije.entrySet()) {
-	        if(entry.getValue().getNaziv().equalsIgnoreCase(naziv)) {
+	        if( entry.getValue().getId() == id) {
+	        	return entry.getValue();
+	        }
+	    }		
+		return null;
+	}
+	public void obrisiManifestaciju(int id) {
+		for (Map.Entry<Integer, Manifestacija> entry : manifestacije.entrySet()) {
+	        if(entry.getValue().getId() == id) {
 	        	entry.getValue().setObrisana(true);
 	        }
 	    }		
-	
+		try {
+			upisiManifestacije();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	public void postaviAktivnost(int id) {
+		for (Map.Entry<Integer, Manifestacija> entry : manifestacije.entrySet()) {
+	        if(entry.getValue().getId() == id) {
+	        	entry.getValue().setAktivnost(true);
+	        }
+	    }		
+		try {
+			upisiManifestacije();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void upisiManifestacije() throws IOException{

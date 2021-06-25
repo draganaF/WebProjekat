@@ -7,6 +7,7 @@ const ChangePassword = {template: '<change-password></change-password>'}
 const RegistrationSeller = {template: '<registration-seller-page></registration-seller-page>'}
 const AdminTableUsers = {template: '<adminTableUsers></adminTableUsers>'}
 const AdminTableSuspiciousUsers = {template: '<adminTableSuspiciousUsers></adminTableSuspiciousUsers>'}
+const ManifestationsTable = {template: '<manifestationsTable></manifestationsTable>'}
 
 const router = new VueRouter({
 	  mode: 'hash',
@@ -14,12 +15,13 @@ const router = new VueRouter({
 	    { path: '/reg', component: Registration},
 	    { path: '/login', component: Login},
 	    { path: '/home', component: HomePage},
-			{ path: '/manifestation', component: Manifestations},
+		{ path: '/manifestation', component: Manifestations},
 	    { path: '/profile', component: Profile},
 	    { path: '/changePassword', component:ChangePassword},
 	    { path: '/registrationSeller', component:RegistrationSeller},
 	    { path: '/adminTableUsers', component: AdminTableUsers},   
 	    { path: '/adminSuspiciousUsers', component: AdminTableSuspiciousUsers},
+	    { path: '/manifestationsAdmin', component: ManifestationsTable},
 	  ]
 });
 

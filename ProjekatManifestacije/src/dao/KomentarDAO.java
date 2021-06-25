@@ -29,7 +29,7 @@ public class KomentarDAO {
 		}
 	}
 
-	public HashMap<Integer,Komentar> getKomentari() {
+	public HashMap<Integer,Komentar> getMapaKomentara() {
 		return mapaKomentara;
 	}
 
