@@ -1,8 +1,8 @@
 {
   "1": {
     "id": 1,
-    "geografskaDuzina":  19.844206352166662,
-    "geografskaSirina":  45.24860138924299,
+    "geografskaDuzina":  19.846413555615353,
+    "geografskaSirina":  45.25013479084961,
     "adresa": {
       "ulica": "Maksima Gorkog",
       "mesto": "Novi Sad",
@@ -15,8 +15,8 @@
   },
   "2": {
     "id": 2,
-    "geografskaDuzina": 19.86179677001239,
-    "geografskaSirina": 45.25311151065026,
+    "geografskaDuzina": 19.86182157095895,
+    "geografskaSirina": 45.25136775322488,
     "adresa": {
       "ulica": "Petrovaradinska tvrdjava",
       "mesto": "Novi Sad",

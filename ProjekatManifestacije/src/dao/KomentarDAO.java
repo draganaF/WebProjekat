@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import com.google.gson.Gson;
@@ -47,7 +48,7 @@ public class KomentarDAO {
 		return validni;
 	}
 	
-	public ArrayList<Komentar> potrebniKomentari(boolean odobreni){
+	public ArrayList<Komentar> potrebniKomentari(int odobreni){
 		ArrayList<Komentar> validni = new ArrayList<Komentar>();
 		for(Komentar k : mapaKomentara.values()) {
 			if(!k.isObrisan() && k.isOdobrena() == odobreni) {
@@ -89,10 +90,10 @@ public class KomentarDAO {
 		
 	}
 	
-	public void odobriKomentar(int id) {
+	public void odobriKomentar(int id, int odobreno) {
 		for(Komentar k : this.mapaKomentara.values()) {
 			if(k.getId()==id) {
-				k.setOdobrena(true);
+				k.setOdobrena(odobreno);
 				return;
 			}
 		}
@@ -112,6 +113,11 @@ public class KomentarDAO {
 		Type token = new TypeToken<HashMap<Integer, Komentar>>(){}.getType();
 		BufferedReader br = new BufferedReader(new FileReader("files/komentari.json"));
 		this.mapaKomentara = gson.fromJson(br, token);
+	}
+	
+	public int nadjiSledeciId() {
+		int maxValueKey = Collections.max(this.mapaKomentara.keySet());
+		return maxValueKey + 1;
 	}
 	
 }
