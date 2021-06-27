@@ -5,11 +5,62 @@ Vue.component("manifestation", {
       manifestation: null,
       comments: [],
       location: null,
+      tickets: [],
       role: localStorage.getItem('role'),
+      canComment: false,
+      canApprove: false,
+      user: localStorage.getItem('krIme'),
+      contentComment: "",
+      commentGrade: -1,
+      errorMessage: "",
     }
   },
   methods: {
-    nadjiStatus: function(){
+    komentarisi: function() {
+      if(this.commentGrade == -1) {
+        this.errorMessage = "Morate da unesete ocenu";
+        return;
+      }
+      if(!this.contentComment) {
+        this.errorMessage = "Morate da unesete sadrzaj komentara";
+        return;
+      }
+      if(this.contentComment) {
+        axios
+        .post('/addComment', {id: -1, 
+                    kupac: "jova96",
+                    manifestacija: this.manifestation.id,
+                    tekst: this.contentComment,
+                    ocena: this.commentGrade,
+                    odobrena: -1,
+                    obrisan: false
+                    })
+        .then(response => {
+          alert("Uspesno ste dodali komentar, ukoliko bude odobren moci cete da ga pregledate");
+          console.log(response)
+        });
+      }
+    },
+    ostaviKomentar: function() {
+      var date = new Date();
+      if (Date.parse(this.manifestation.datum) >= date) {
+        this.canComment = false;
+      }  
+      else {
+        for(var i = 0; i < this.tickets.length; i++) {
+          if(this.tickets[i].kupac == this.user) {
+            for(var j = 0; j < this.comments.length; j++) {
+              if(this.comments.kupac == this.user){
+                this.canComment = false;
+                return;
+              }
+            }
+            this.canComment = true;
+          }
+        }
+      }
+    },
+    nadjiStatus: function() {
       if(this.manifestation.status){
         return "AKTIVNA";
       }
@@ -17,40 +68,46 @@ Vue.component("manifestation", {
         return "NEAKTIVNA";
       }
     },
-    srednjaOcena: function(id){
+    srednjaOcena: function(id) {
 			
 			let srednjaVrednost = 0;
 			let brojOcena = 0;
-			for(let i = 0; i < this.comments.length; i++)
-			{
-				if(id == this.comments[i].manifestacija)
-				{
+			for(let i = 0; i < this.comments.length; i++) {
+				if(id == this.comments[i].manifestacija) {
 					srednjaVrednost = srednjaVrednost + this.comments[i].ocena;
 					brojOcena++;
 				}
 			}
-			if(srednjaVrednost == 0){
+			if(srednjaVrednost == 0) {
 				srednjaVrednost = "Nije ocenjena";
 			}
-			else{
+			else {
 				srednjaVrednost = (srednjaVrednost/brojOcena).toFixed(2);
 			}
 			return srednjaVrednost;
 		},
-    nadjiKomentare: function(id){
+    nadjiKarte: function(id) {
+      axios.get("/manifestationTickets?id=" + id)
+      .then(response3 => {
+        this.tickets = response3.data;
+        this.ostaviKomentar();
+      });
+    },
+    nadjiKomentare: function(id) {
       axios.get("/commentsForManifestation?id=" + id)
         .then(response2 => {
           this.comments = response2.data;
+          this.nadjiKarte(id);
         });
     },
-    nadjiLokaciju: function(id){
+    nadjiLokaciju: function(id) {
       axios.get("/manifestationLocation?id=" + this.manifestation.lokacija)
       .then(response1 => {
         this.location = response1.data;
         this.nadjiKomentare(id);
       });
     },
-    nadjiManifestaciju: function(){
+    nadjiManifestaciju: function() {
       let id = this.$route.params.id;
       axios.get('/manifestation?id=' + id)
       .then(response => {
@@ -62,12 +119,10 @@ Vue.component("manifestation", {
       });
     }
   },
-  mounted: function(){
-
+  mounted: function() {
     this.nadjiManifestaciju();      
-    
     },
-  beforeUpdate: function(){
+  beforeUpdate: function() {
     this.map = new ol.Map({
       target: 'map',
       layers: [
@@ -77,14 +132,14 @@ Vue.component("manifestation", {
       ],
       view: new ol.View({
         center: ol.proj.fromLonLat([this.location.geografskaDuzina,this.location.geografskaSirina]),
-        zoom: 16
+        zoom: 18
       })
     });
     var markers = new ol.layer.Vector({
       source: new ol.source.Vector(),
       style: new ol.style.Style({
         image: new ol.style.Icon({
-          anchor: [0.5, 2],
+          anchor: [0.5, 1],
           src: "./images/marker.png",
         }),
       }),
@@ -99,7 +154,7 @@ Vue.component("manifestation", {
   template: `
   <div class="container-fluid body-reg">
     <div class="card" style="margin-bottom:1em;" width="350em">
-      <div class="card-header"  style="background-color:#1fb579;    color:white">Pregled Manifestacije</div>
+      <div class="card-header"  style="background-color:#1fb579; color:white">Pregled Manifestacije</div>
      
       <div class="card-body" width="350em">
         <div class="row">
@@ -120,10 +175,7 @@ Vue.component("manifestation", {
           </div>
           <div class="list-group-item" style="margin-left:4em;">Lokacija: {{ location.adresa.drzava}}, {{location.adresa.mesto}}, {{ location.adresa.ulica }} {{location.adresa.broj}}
 	          <div id="map" class="map" width="330em" height="350em">
-	            <div id="popup" class="ol-popup" ref="container">
-			          <a href="#" id="popup-closer" class="ol-popup-closer" ref="closer"></a>
-				        <div id="popup-content" ref="content"></div>
-		          </div>
+	           
 	          </div>
           </div>
         </div>
@@ -132,7 +184,7 @@ Vue.component("manifestation", {
     <div class="card" style="margin-bottom:2em;">
       <div class="card-header">Komentari:</div>
       <div class="card-body">
-        <div v-if="role!='Seller' && role!='Admin'" v-for="comment in comments" class="comment-widgets">
+        <div v-if="role!='prodavac' && role!='admin'" v-for="comment in comments" class="comment-widgets">
           <div v-if="comment.odobrena == 1" class="d-flex flex-row comment-row m-t-0">
             <div class="p-2"><img src="./images/user.jpg" alt="user" width="50" class="rounded-circle"></div>
               <div class="comment-text w-100">
@@ -144,18 +196,33 @@ Vue.component("manifestation", {
             </div>
         </div>
       </div>
-      <div v-if="role=='Seller' || role=='Admin'" v-for="comment in comments" class="comment-widgets">
+      <div v-if="role=='prodavac' || role=='admin'" v-for="comment in comments" class="comment-widgets">
         <div class="d-flex flex-row comment-row m-t-0">
           <div class="p-2"><img src="./images/user.jpg" alt="user" width="50" class="rounded-circle"></div>
           <div class="comment-text w-100">
               <h6 class="font-medium">{{ comment.kupac }}</h6> <span class="m-b-15 d-block">{{ comment.tekst }} </span>
               <div class="comment-footer">
                 <span class="text-muted float-right">Ocena: {{ comment.ocena }}</span></div>
-                <div v-if="comment.odobrena == 1"><span class="m-b-15 d-block">Odobren</span></div>
-                <div v-if="comment.odobrena == 0"><span class="m-b-15 d-block">Odbijen</span></div>
+                <div v-if="comment.odobrena == 1"><span class="m-b-15 d-block" style="color: green;">Odobren</span></div>
+                <div v-if="comment.odobrena == 0"><span class="m-b-15 d-block" style="color: red;">Odbijen</span></div>
+                <hr>
               </div>
+             
           </div>
         </div>
+      </div>
+      <div v-if="canComment"> 
+        <p class="text-muted d-flex flex-row comment-row m-t-0">Unesite komentar i ocenu:</p>
+        <textarea style="margin-left:0.2em; width: 30em;" v-model="contentComment" class="form-control d-flex flex-row comment-row m-t-0 textarea"></textarea>
+        <select style="margin-top:1em; margin-bottom:0.5em; margin-left:0.2em; width: 30em;"  v-model="commentGrade" class="form-control">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
+        <button type="submit" class="btn" style="background-color:#1fb579; color:white; margin-left:0.2em;" v-on:click="komentarisi">Dodaj komentar</button> 
+        <p v-if="errorMessage" class="text-muted">{{ errorMessage }}</p>
       </div>
     </div>
   </div>

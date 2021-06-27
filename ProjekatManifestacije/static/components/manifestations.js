@@ -19,7 +19,7 @@ Vue.component("manifestations", {
   },
   methods: {
 		detaljanPregled: function(id){
-			console.log(id);
+			router.push({ path: `/manifestation/${id}` })
 			
 		},
 		manifestationLocation: function(id){
