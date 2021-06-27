@@ -17,6 +17,7 @@ import java.util.Map;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import beans.Karta;
 import beans.Lokacija;
 import beans.Manifestacija;
 import beans.TipManifestacije;
@@ -313,4 +314,90 @@ public class ManifestacijeDAO {
 		return validne;
 	}
 
+	
+	public ArrayList<Karta> nadjiPoDatumima(ArrayList<Karta> tempKarte, String pretragaDatumOd,String pretragaDatumDo, String naziv){
+		Date datumOd = new Date();
+		try {
+			datumOd = new SimpleDateFormat("yyyy-MM-dd").parse(pretragaDatumOd);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Date datumDo = new Date();
+		try {
+			datumDo = new SimpleDateFormat("yyyy-MM-dd").parse(pretragaDatumDo);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		ArrayList<Karta> izabrane = new ArrayList<Karta>();
+		for(Karta k : tempKarte) {
+			for(Manifestacija m : manifestacije.values()) {
+				if(naziv.equals("")) {
+					if(k.getManifestacija() == m.getId() && m.getDatum().before(datumDo) && m.getDatum().after(datumOd)){
+						izabrane.add(k);
+					}
+				}else {
+					if(k.getManifestacija() == m.getId() && m.getDatum().before(datumDo) && m.getDatum().after(datumOd) && m.getNaziv().contains(naziv) ) {
+					izabrane.add(k);
+					}
+			}}
+		}
+		
+		
+		
+		return izabrane;
+	}
+	public ArrayList<Karta> nadjiPoNazivu(ArrayList<Karta> tempKarte, String naziv){
+		ArrayList<Karta> izabrane = new ArrayList<Karta>();
+		for(Karta k : tempKarte) {
+			for(Manifestacija m : manifestacije.values()) {
+				if(naziv.equals("")) {
+					return izabrane;
+				}else {
+					if(k.getManifestacija() == m.getId() && m.getNaziv().contains(naziv) ) {
+						izabrane.add(k);
+					}
+				}
+			}
+		}
+		
+		
+		
+		return izabrane;
+	}
+	
+	public void  promeniBrojMesta(Manifestacija manifestacija){
+		
+			for(Manifestacija m : manifestacije.values()) {
+				if(m.getId() == manifestacija.getId()) {
+					int brojMesta = m.getSlobodnaMesta();
+					m.setSlobodnaMesta(brojMesta + 1);
+					
+				}
+			}
+		try {
+			upisiManifestacije();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
+
+	public ArrayList<Manifestacija> nadjiManifestacijeId(ArrayList<Integer> man) {
+		ArrayList<Manifestacija> izabrane = new ArrayList<Manifestacija>();
+		for(Manifestacija m : manifestacije.values()) {
+			for(int i = 0; i< man.size();i++) {
+				if(man.get(i) == m.getId()) {
+					izabrane.add(m);
+				}
+			}
+		}
+		
+		
+		return izabrane;
+	}
 }

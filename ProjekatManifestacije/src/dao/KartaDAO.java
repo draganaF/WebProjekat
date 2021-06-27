@@ -9,11 +9,13 @@ import java.lang.reflect.Type;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import beans.Karta;
+import beans.Manifestacija;
 import beans.TipKarte;
 import sorter.KartaSorter;
 
@@ -110,7 +112,19 @@ public class KartaDAO {
 		
 		return validne;
 	}
-	
+	public ArrayList<Karta> rezervisaneKarte(ArrayList<Manifestacija> manifestacije){
+		
+		ArrayList<Karta> rezervisane = new ArrayList<Karta>();
+		for(Manifestacija m :manifestacije) {
+			for(Karta k : karte) {
+				if(!k.isObrisana() && k.isStatus() && k.getManifestacija() == m.getId()) {
+					rezervisane.add(k);
+				}
+			}
+		}
+		return rezervisane;
+	}
+
 	public Karta nadjiKartu(String id) {
 		for(Karta k : karte) {
 			if(k.getId().equalsIgnoreCase(id)) {
@@ -126,6 +140,12 @@ public class KartaDAO {
 				k.setObrisana(true);
 				break;
 			}
+		}
+		try {
+			upisiKarte();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	public ArrayList<Karta> nadjiPoCeni(int odCena, int doCena){
@@ -155,6 +175,57 @@ public class KartaDAO {
 			}
 		}
 		return karte;
+	}
+	
+	public ArrayList<Karta> nadjiPoParametrima(ArrayList<Karta>kk, String tip, String status){
+		ArrayList<Karta> izabrane = new ArrayList<Karta>();
+		for(Karta k : kk) {
+			if(status.equals("rezervisana")) {
+				if(tip.equals("")) {
+					if(!k.isObrisana() && k.isStatus()) {
+						izabrane.add(k);
+					}
+				}else {
+					if(!k.isObrisana() && k.getTipKarte().name().contains(tip) && k.isStatus()) {
+						izabrane.add(k);
+					}
+				}
+			}else if(status.equals("odustanak")) {
+				if(tip.equals("")) {
+					if(!k.isObrisana() && !k.isStatus()) {
+						izabrane.add(k);
+					}
+				}else {
+					if(!k.isObrisana() && k.getTipKarte().name().contains(tip) && !k.isStatus()) {
+					izabrane.add(k);
+					}
+				}
+			}else {
+				if(tip.equals("")) {
+					if(!k.isObrisana()) {
+						izabrane.add(k);
+					}
+				}else {
+					if(!k.isObrisana() && k.getTipKarte().name().contains(tip)) {
+					izabrane.add(k);
+					}
+				}
+			}
+		}
+		return izabrane;
+	}
+	public ArrayList<Karta> nadjiPoCeniStatusuTipu(ArrayList<Karta> kk,String tip, String status, String pretragaCenaOd, String pretragaCenaDo){
+		double cenaOd = Double.parseDouble(pretragaCenaOd);
+		double cenaDo = Double.parseDouble(pretragaCenaDo);
+		ArrayList<Karta> nove = new ArrayList<Karta>();
+		ArrayList<Karta> karteIzabrane = new ArrayList<Karta>();
+		nove = nadjiPoParametrima(kk,tip, status);
+		for(Karta k : nove) {
+			if(k.getCena() <= cenaDo && k.getCena()>=cenaOd ) {
+				karteIzabrane.add(k);
+			}
+		}
+		return karteIzabrane;
 	}
 
 	public void upisiKarte() throws IOException{

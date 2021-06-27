@@ -382,6 +382,168 @@ public class ProjekatManifestacijeMain  {
 			return g.toJson(lokacijeDAO.lokacijaManifestacije(Integer.parseInt(id)));
 		});
 		
+		get("/tickets", (req, res) -> {
+			return g.toJson(kartaDAO.validneKarte());
+		});
+		
+		get("/ticketManifestation", (req, res)->{
+			String i =  req.queryParams("id");
+			
+			Manifestacija m = manifestacijeDAO.nadjiManifestaciju(Integer.parseInt(i));
+			if(m == null) {
+				return false;
+			}
+			return g.toJson(m);
+			
+		});
+		
+		get("/reservedTickets", (req, res) -> {
+			String korisnickoIme =  req.queryParams("korisnickoIme");
+			Prodavac p = prodavacDAO.nadjiProdavcaProfil(korisnickoIme);
+			ArrayList<Manifestacija> manifestacije = manifestacijeDAO.nadjiManifestacijeId(p.getManifestacije());
+			return g.toJson(kartaDAO.rezervisaneKarte(manifestacije));
+		});
+		
+		get("/searchTickets", (req, res)->{
+			String pretragaManifestacija =  req.queryParams("pretragaManifestacija");
+			String pretragaCenaOd =  req.queryParams("pretragaCenaOd");
+			String pretragaCenaDo =  req.queryParams("pretragaCenaDo");
+			String pretragaDatumOd = req.queryParams("pretragaDatumOd");
+			String pretragaDatumDo = req.queryParams("pretragaDatumDo");
+			
+			String role = req.queryParams("role");
+			String korisnickoIme = req.queryParams("korisnickoIme");
+			ArrayList<Karta> rezervisaneProdavac = new ArrayList<Karta>();
+			if(role.equals("prodavac")) {
+				Prodavac p = prodavacDAO.nadjiProdavcaProfil(korisnickoIme);
+				ArrayList<Manifestacija> manifestacije = manifestacijeDAO.nadjiManifestacijeId(p.getManifestacije());
+				rezervisaneProdavac = kartaDAO.rezervisaneKarte(manifestacije);
+			}
+			
+			String status =  req.queryParams("status");
+			String tip = req.queryParams("tip");
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd hh:mm").create();
+			ArrayList<Karta> karte = new ArrayList<Karta>();
+			ArrayList<Karta> tempKarte = new ArrayList<Karta>();
+			if(pretragaCenaOd.equals("") || pretragaCenaDo.equals("")) {
+				if(pretragaDatumOd.equals("") || pretragaDatumDo.equals("")) {
+					if(role.equals("admin")) {
+						tempKarte = kartaDAO.nadjiPoParametrima(kartaDAO.getKarte(),tip,status);
+					}else if(role.equals("prodavac")){
+						tempKarte = kartaDAO.nadjiPoParametrima(rezervisaneProdavac,tip,status);
+					}
+					if(tempKarte.size() == 0) {
+						if(role.equals("admin")) {
+							karte = manifestacijeDAO.nadjiPoNazivu(kartaDAO.getKarte(),pretragaManifestacija);
+							return  gsonReg.toJson(karte);
+						}else if(role.equals("prodavac")){
+							karte = manifestacijeDAO.nadjiPoNazivu(rezervisaneProdavac,pretragaManifestacija);
+							return  gsonReg.toJson(karte);
+						}
+					}else {
+						if(pretragaManifestacija.equals("")) {
+							
+							karte = tempKarte;
+							return  gsonReg.toJson(karte);
+						}else {
+							karte = manifestacijeDAO.nadjiPoNazivu(tempKarte,pretragaManifestacija);
+							return  gsonReg.toJson(karte);
+					}
+						}
+					
+				}else {
+					if(role.equals("admin")) {
+						tempKarte = kartaDAO.nadjiPoParametrima(kartaDAO.getKarte(), tip,status);
+					}else if(role.equals("prodavac")) {
+						tempKarte = kartaDAO.nadjiPoParametrima(rezervisaneProdavac, tip,status);
+					}
+					if(tempKarte.size() == 0) {
+						if(role.equals("admin")) {
+							karte = manifestacijeDAO.nadjiPoDatumima(kartaDAO.getKarte(),pretragaDatumOd, pretragaDatumDo, pretragaManifestacija);
+							return  gsonReg.toJson(karte);
+						}else if(role.equals("prodavac")) {
+							karte = manifestacijeDAO.nadjiPoDatumima(rezervisaneProdavac,pretragaDatumOd, pretragaDatumDo, pretragaManifestacija);
+							return  gsonReg.toJson(karte);
+						}
+					}else {
+						if(pretragaManifestacija.equals("")) {
+							karte = tempKarte;
+							return  gsonReg.toJson(karte);
+						}else {
+							karte = manifestacijeDAO.nadjiPoDatumima(tempKarte,pretragaDatumOd, pretragaDatumDo, pretragaManifestacija);
+							return  gsonReg.toJson(karte);
+						}
+						
+					}
+					
+				}
+			}else {
+				if(pretragaDatumOd.equals("") || pretragaDatumDo.equals("")) {
+					if(role.equals("admin")) {
+						tempKarte = kartaDAO.nadjiPoCeniStatusuTipu(kartaDAO.getKarte(), tip,status,pretragaCenaOd, pretragaCenaDo);
+					}else if(role.equals("prodavac")) {
+						tempKarte = kartaDAO.nadjiPoCeniStatusuTipu(rezervisaneProdavac, tip,status,pretragaCenaOd, pretragaCenaDo);
+					}
+					if(tempKarte.size() == 0) {
+						if(role.equals("admin")) {
+							karte = manifestacijeDAO.nadjiPoNazivu(kartaDAO.getKarte(),pretragaManifestacija);
+							return  gsonReg.toJson(karte);
+						}else if(role.equals("prodavac")) {
+							karte = manifestacijeDAO.nadjiPoNazivu(rezervisaneProdavac,pretragaManifestacija);
+							return  gsonReg.toJson(karte);
+						}
+					}else {
+						if(pretragaManifestacija.equals("")) {
+							karte = tempKarte;
+							return  gsonReg.toJson(karte);
+						}else {
+							karte = manifestacijeDAO.nadjiPoNazivu(tempKarte,pretragaManifestacija);
+							return  gsonReg.toJson(karte);
+						}
+					}
+					
+				}else {
+					if(role.equals("admin")) {
+						tempKarte = kartaDAO.nadjiPoCeniStatusuTipu(kartaDAO.getKarte(), tip,status,pretragaCenaOd, pretragaCenaDo);
+					}else if(role.equals("prodavac")) {
+						tempKarte = kartaDAO.nadjiPoCeniStatusuTipu(rezervisaneProdavac, tip,status,pretragaCenaOd, pretragaCenaDo);
+					}
+					if(tempKarte.size() == 0) {
+						if(role.equals("admin")) {
+							karte = manifestacijeDAO.nadjiPoDatumima(kartaDAO.getKarte(),pretragaDatumOd, pretragaDatumDo,pretragaManifestacija);
+							return  gsonReg.toJson(karte);
+						}else if(role.equals("prodavac")) {
+							karte = manifestacijeDAO.nadjiPoDatumima(rezervisaneProdavac,pretragaDatumOd, pretragaDatumDo,pretragaManifestacija);
+							return  gsonReg.toJson(karte);
+						}
+					}else {
+						if(pretragaManifestacija.equals("")) {
+							
+							karte = tempKarte;
+							return  gsonReg.toJson(karte);
+						}else {
+							karte = manifestacijeDAO.nadjiPoDatumima(tempKarte,pretragaDatumOd, pretragaDatumDo,pretragaManifestacija);
+							return  gsonReg.toJson(karte);
+						}
+					}
+					
+				}
+			}
+			return true;
+			 
+			
+		});
+		
+		
+		post("/deleteTicket", (req, res)-> {
+			String id =  req.queryParams("id");
+			Karta k = kartaDAO.nadjiKartu(id);
+			kartaDAO.obrisiKartu(id);
+			Manifestacija m = manifestacijeDAO.nadjiManifestaciju(k.getManifestacija());
+			manifestacijeDAO.promeniBrojMesta(m);
+			return true;
+			
+		});
 		
 	}
 
