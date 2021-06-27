@@ -5,7 +5,7 @@ public class Komentar {
 	private int id;
 	private String kupac;
 	private int manifestacija;
-	private String teskt;
+	private String tekst;
 	private int ocena;
 	private boolean odobrena;
 	private boolean obrisan;
@@ -20,7 +20,7 @@ public class Komentar {
 		this.id = id;
 		this.kupac = kupac;
 		this.manifestacija = manifestacija;
-		this.teskt = teskt;
+		this.tekst = teskt;
 		this.ocena = ocena;
 		this.odobrena = odobrena;
 		this.obrisan = obrisan;
@@ -43,11 +43,11 @@ public class Komentar {
 	}
 
 	public String getTeskt() {
-		return teskt;
+		return tekst;
 	}
 
 	public void setTeskt(String teskt) {
-		this.teskt = teskt;
+		this.tekst = teskt;
 	}
 
 	public int getOcena() {

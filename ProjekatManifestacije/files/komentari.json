@@ -3,7 +3,7 @@
     "id": 1,
     "kupac": "nikolinatosic999@gmail.com",
     "manifestacija": 1,
-    "teskt": "Clapton rastura",
+    "tekst": "Clapton rastura",
     "ocena": 5,
     "obrisana": false,
     "odobrena": true
@@ -12,7 +12,7 @@
   	"id": 2,
     "kupac": "jova96",
     "manifestacija": 1,
-    "teskt": "Koncert je bio odlican, samo je bilo mnogo ljudi",
+    "tekst": "Koncert je bio odlican, samo je bilo mnogo ljudi",
     "ocena": 4,
     "obrisana": false,
     "odobrena": true

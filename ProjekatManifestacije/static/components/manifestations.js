@@ -18,6 +18,10 @@ Vue.component("manifestations", {
     }
   },
   methods: {
+		detaljanPregled: function(id){
+			console.log(id);
+			
+		},
 		manifestationLocation: function(id){
 			let i = 0;
 			for(i ; i < this.locationList.length; i++){
@@ -306,7 +310,7 @@ Vue.component("manifestations", {
 							<li class="list-group-item">Cena regularne karte: {{ manifestation.cenaKarte }}</li>
 							<li class="list-group-item">Lokacija: {{ (manifestationLocation(manifestation.lokacija)).adresa.drzava}}, {{(manifestationLocation(manifestation.lokacija)).adresa.mesto}}, {{ (manifestationLocation(manifestation.lokacija)).adresa.ulica}}</li>
 							<li class="list-group-item">Ocena: {{srednjaOcena(manifestation.id)}}</li>
-							<li class="list-group-item"><button type="button" class="btn btn-outline-dark">Detaljan pregled</button></li>
+							<li class="list-group-item"><button type="button" class="btn btn-outline-dark" v-on:click="detaljanPregled(manifestation.id)">Detaljan pregled</button></li>
 						</ul>
 						</hr>
 					</div>	

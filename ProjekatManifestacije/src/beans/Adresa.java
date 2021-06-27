@@ -3,6 +3,7 @@ package beans;
 public class Adresa {
 	private  String ulica;
 	private String mesto;
+	private int broj;
 	private int postanskiBroj;
 	private boolean obrisana;
 	private String drzava;
@@ -48,5 +49,13 @@ public class Adresa {
 
 	public void setDrzava(String drzava) {
 		this.drzava = drzava;
+	}
+
+	public int getBroj() {
+		return broj;
+	}
+
+	public void setBroj(int broj) {
+		this.broj = broj;
 	}
 }
