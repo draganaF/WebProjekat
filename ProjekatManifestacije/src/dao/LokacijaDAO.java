@@ -38,6 +38,16 @@ public class LokacijaDAO {
 		this.lokacije = lokacije;
 	}
 	
+	public Lokacija lokacijaManifestacije(int id) {
+		for(Lokacija l : lokacije.values()) 
+		{
+			if(l.getId() == id) {
+				return l;
+			}
+		}
+		
+		return null;
+	}
 	public Lokacija nadjiLokaciju(Adresa adresa) {
 		for (Map.Entry<Integer, Lokacija> entry : lokacije.entrySet()) {
 	        if(entry.getValue().getAdresa().equals(adresa)){
@@ -68,7 +78,6 @@ public class LokacijaDAO {
 		BufferedReader br = new BufferedReader(new FileReader("files/lokacije.json"));
 		this.lokacije = gson.fromJson(br, token);
 		
-		System.out.println(lokacije.get(1).getAdresa().getDrzava());
 	}
 
 }

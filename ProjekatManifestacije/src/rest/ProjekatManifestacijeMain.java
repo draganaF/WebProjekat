@@ -366,6 +366,22 @@ public class ProjekatManifestacijeMain  {
 			
 		});
 		
+		get("/manifestation", (req, res) -> {
+			String id = req.queryParams("id");
+			Manifestacija m = manifestacijeDAO.nadjiManifestaciju(Integer.parseInt(id));
+			return g.toJson(m);
+		});
+		
+		get("/commentsForManifestation", (req, res) -> {
+			String id = req.queryParams("id");
+			return g.toJson(komentariDAO.komentariManifestacije(Integer.parseInt(id)));
+		});
+		
+		get("/manifestationLocation", (req, res) -> {
+			String id = req.queryParams("id");
+			return g.toJson(lokacijeDAO.lokacijaManifestacije(Integer.parseInt(id)));
+		});
+		
 		
 	}
 

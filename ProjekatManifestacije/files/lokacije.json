@@ -1,11 +1,12 @@
 {
   "1": {
     "id": 1,
-    "geografskaDuzina": 19.0,
-    "geografskaSirina": 45.0,
+    "geografskaDuzina":  19.844206352166662,
+    "geografskaSirina":  45.24860138924299,
     "adresa": {
-      "ulica": "Pozorisni trg 1",
+      "ulica": "Maksima Gorkog",
       "mesto": "Novi Sad",
+      "broj": 7,
       "postanskiBroj": 21000,
       "obrisana": false,
       "drzava": "Srbija"
@@ -14,11 +15,12 @@
   },
   "2": {
     "id": 2,
-    "geografskaDuzina": 19.52,
-    "geografskaSirina": 45.12,
+    "geografskaDuzina": 19.86179677001239,
+    "geografskaSirina": 45.25311151065026,
     "adresa": {
-      "ulica": "Ignjata Pavlasa 4",
+      "ulica": "Petrovaradinska tvrdjava",
       "mesto": "Novi Sad",
+      "broj": 1,
       "postanskiBroj": 21000,
       "obrisana": false,
       "drzava": "Srbija"
