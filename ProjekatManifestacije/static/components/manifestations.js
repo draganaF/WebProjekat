@@ -15,6 +15,8 @@ Vue.component("manifestations", {
       filterAvailable: "",
       sortType: true,
       sortCriteria: "",
+	  role:"",
+	  username:"",
     }
   },
   methods: {
@@ -58,12 +60,21 @@ Vue.component("manifestations", {
 			}
 			else
 			{
-				var searchParameters = "searchName=" + this.searchName+ "&searchLocation=" + this.searchLocation + "&searchPriceFrom=" + this.searchPriceFrom + "&searchPriceTo=" + this.searchPriceTo + "&searchDateFrom=" + this.searchDateFrom + "&searchDateTo=" + this.searchDateTo + "&filterAvaiable=" + this.filterAvailable + "&filterType=" + this.filterType;
+				if(this.role == 'prodavac'){
+					axios.get('/searchManifestationsSeller', {params:{searchName:this.searchName, korisnickoIme:this.username, searchLocation:this.searchLocation, searchPriceFrom:this.searchPriceFrom,searchPriceTo:this.searchPriceTo, searchDateFrom:this.searchDateFrom,searchDateTo:this.searchDateTo,filterAvaiable:this.filterAvailable,filterType:this.filterType}})
+					.then(response => {
+						this.manifestationList = response.data;
+				});
 
-				axios.get("/searchManifestations?" + searchParameters)
-						.then(response => {
-							this.manifestationList = response.data;
-						})
+				}else{
+					var searchParameters = "searchName=" + this.searchName+ "&searchLocation=" + this.searchLocation + "&searchPriceFrom=" + this.searchPriceFrom + "&searchPriceTo=" + this.searchPriceTo + "&searchDateFrom=" + this.searchDateFrom + "&searchDateTo=" + this.searchDateTo + "&filterAvaiable=" + this.filterAvailable + "&filterType=" + this.filterType;
+
+					axios.get("/searchManifestations?" + searchParameters)
+							.then(response => {
+								this.manifestationList = response.data;
+							})
+				}
+				
 			}
 		},
 		compareData: function(a,b){
@@ -230,6 +241,18 @@ Vue.component("manifestations", {
 		},
   },
   mounted: function(){
+	this.username = window.localStorage.getItem('kIme');
+	this.role = window.localStorage.getItem('role');
+	if(this.role == "prodavac"){
+		axios.get("/sellerManifestations", {params:{korisnickoIme:this.username}})
+		.then(response => {
+			this.manifestationList = response.data;
+		});
+		axios.get("/manifestationLocations")
+			.then(response => {
+				this.locationList = response.data;
+			});
+	}else{
     axios.get("/manifestations")
 			.then(response => {
 				this.manifestationList = response.data;
@@ -244,6 +267,7 @@ Vue.component("manifestations", {
 			.then(response => {
 				this.oceneList = response.data;
 			});
+		}
   },
   template: `
   <div class="card">
