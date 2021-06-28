@@ -7,14 +7,14 @@ public class Komentar {
 	private int manifestacija;
 	private String tekst;
 	private int ocena;
-	private boolean odobrena;
+	private int odobrena;
 	private boolean obrisan;
 	
 	public Komentar() {
 		
 	}
 
-	public Komentar(int id, String kupac, int manifestacija, String teskt, int ocena, boolean odobrena,
+	public Komentar(int id, String kupac, int manifestacija, String teskt, int ocena, int odobrena,
 			boolean obrisan) {
 		super();
 		this.id = id;
@@ -58,11 +58,11 @@ public class Komentar {
 		this.ocena = ocena;
 	}
 
-	public boolean isOdobrena() {
+	public int isOdobrena() {
 		return odobrena;
 	}
 
-	public void setOdobrena(boolean odobrena) {
+	public void setOdobrena(int odobrena) {
 		this.odobrena = odobrena;
 	}
 

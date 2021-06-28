@@ -20,6 +20,7 @@ import beans.Kupac;
 import beans.Manifestacija;
 import beans.Prodavac;
 import beans.Karta;
+import beans.Komentar;
 import dao.AdministratorDAO;
 import dao.KartaDAO;
 import dao.KomentarDAO;
@@ -103,7 +104,6 @@ public class ProjekatManifestacijeMain  {
 				
 				
 			}
-				
 			return g.toJson(response);
 			
 		});
@@ -599,6 +599,37 @@ public class ProjekatManifestacijeMain  {
 			return g.toJson(manifestacijeDAO.pretraga(manifestacije,filterAvaible, filterType, searchName, searchLocation, searchPriceFrom, searchPriceTo, searchDateFrom, searchDateTo));
 		});
 		
+		get("/manifestationTickets", (req, res) -> {
+			String id = req.queryParams("id");
+			return g.toJson(kartaDAO.karteManifestacije(Integer.parseInt(id)));
+		});
+		
+		post("/addComment", (req, res) -> {			
+			String reqBody = req.body();
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd hh:mm").create();
+			
+			Komentar k = gsonReg.fromJson(reqBody, Komentar.class);
+			
+			int id = komentariDAO.nadjiSledeciId();
+			k.setId(id);
+			
+			HashMap<Integer, Komentar> komentari = komentariDAO.getMapaKomentara();
+			komentari.put(id, k);
+			komentariDAO.setKomentari(komentari);
+			komentariDAO.upisiKomentare();
+			
+			return true;
+			
+		});
+		
+		get("/approveComment", (req, res) -> {
+			int id = Integer.parseInt(req.queryParams("id"));
+			int approve = Integer.parseInt(req.queryParams("odobrena"));
+			
+			komentariDAO.odobriKomentar(id, approve);
+			komentariDAO.upisiKomentare();
+			return true;
+		});
 	}
 
 }
