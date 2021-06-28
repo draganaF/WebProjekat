@@ -12,7 +12,10 @@ import java.util.Map;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
+import beans.Karta;
 import beans.Kupac;
+import beans.Manifestacija;
 import beans.Tip;
 import beans.TipKupca;
 
@@ -165,5 +168,20 @@ public class KupacDAO {
 			e.printStackTrace();
 		}
 	    }
+	
+
+
+	public ArrayList<Kupac> nadjiKupce(ArrayList<Karta> karte){
+	ArrayList<Kupac> lista = new ArrayList<Kupac>();
+	for(Karta karta : karte) {
+		for(Kupac k : kupci.values()) {
+			System.out.println(karta.getId());
+			if(karta.getKupac().equals(k.getKorisnickoIme()) && !k.isObrisan()) {
+				lista.add(k);
+			}
+		}
 	}
+	return lista;
+	}
+}
 

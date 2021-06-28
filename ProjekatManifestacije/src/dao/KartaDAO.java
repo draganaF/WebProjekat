@@ -112,10 +112,10 @@ public class KartaDAO {
 		
 		return validne;
 	}
-	public ArrayList<Karta> rezervisaneKarte(ArrayList<Manifestacija> manifestacije){
+	public ArrayList<Karta> rezervisaneKarte(HashMap<Integer,Manifestacija> manifestacije){
 		
 		ArrayList<Karta> rezervisane = new ArrayList<Karta>();
-		for(Manifestacija m :manifestacije) {
+		for(Manifestacija m :manifestacije.values()) {
 			for(Karta k : karte) {
 				if(!k.isObrisana() && k.isStatus() && k.getManifestacija() == m.getId()) {
 					rezervisane.add(k);
