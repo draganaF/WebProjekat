@@ -400,4 +400,22 @@ public class ManifestacijeDAO {
 		
 		return izabrane;
 	}
+	
+	public void  smanjiBrojMesta(int kolicina, Manifestacija manifestacija){
+		
+		for(Manifestacija m : manifestacije.values()) {
+			if(m.getId() == manifestacija.getId()) {
+				int brojMesta = m.getSlobodnaMesta();
+				m.setSlobodnaMesta(brojMesta-kolicina);
+				
+			}
+		}
+	try {
+		upisiManifestacije();
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	
+}
 }

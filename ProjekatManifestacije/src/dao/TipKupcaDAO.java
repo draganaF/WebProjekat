@@ -17,8 +17,13 @@ import beans.TipKupca;
 public class TipKupcaDAO {
 	private HashMap<String,TipKupca> tipovi;
 	
-	public TipKupcaDAO() throws FileNotFoundException {
-		ucitajTipove();
+	public TipKupcaDAO() {
+		try {
+			ucitajTipove();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public HashMap<String,TipKupca> getTipove() {
@@ -31,7 +36,7 @@ public class TipKupcaDAO {
 	
 	public void ucitajTipove() throws FileNotFoundException {	
 		Gson gson = new Gson();
-		Type token = new TypeToken<HashMap<String,Kupac>>(){}.getType();
+		Type token = new TypeToken<HashMap<String,TipKupca>>(){}.getType();
 		BufferedReader br = new BufferedReader(new FileReader("files/tipoviKupaca.json"));
 		this.tipovi = gson.fromJson(br, token);
 	}
@@ -42,6 +47,16 @@ public class TipKupcaDAO {
 		gson.toJson(this.tipovi, fw);
 		fw.flush();
 		fw.close();
+	}
+	
+	
+	public TipKupca nadjiKupca(String id) {
+		for(TipKupca t : tipovi.values()) {
+			if(t.getImeTipa().name().equals(id)) {
+				return t;
+			}
+		}
+		return null;
 	}
 	
 

@@ -6,13 +6,19 @@ Vue.component("manifestation", {
       comments: [],
       location: null,
       tickets: [],
-      role: localStorage.getItem('role'),
+      role: "",
       canComment: false,
       canApprove: false,
-      user: localStorage.getItem('krIme'),
+      user: "",
       contentComment: "",
       commentGrade: -1,
       errorMessage: "",
+      reservation: {
+        cardType: "REGULAR",
+        price: 0,
+        quantity: 0,
+      },
+      typeUser: {},
     }
   },
   methods: {
@@ -68,6 +74,29 @@ Vue.component("manifestation", {
         return "NEAKTIVNA";
       }
     },
+    racun: function() {
+      this.reservation.price = this.reservation.quantity * this.manifestation.cenaKarte;
+      if (this.reservation.cardType == "FANPIT") {
+        this.reservation.price = 2 *  this.reservation.price;
+      } else if(this.reservation.cardType == "VIP") {
+        this.reservation.price = 4 * this.reservation.price;
+      }
+      this.reservation.price = this.reservation.price * (1 - this.typeUser.popust / 100);
+    },
+    kupiKarte : function(event){
+    let id = this.$route.params.id;
+      axios
+      .post('/reserveTicket',{},{params:{korisnickoIme:this.kIme, manifestacija:id,tipKarte:this.reservation.cardType, kolicina:this.reservation.quantity}})
+      .then((response) => {
+        alert("Uspesno set rezervisali kartu/e! ");
+        this.nadjiManifestaciju();  
+        
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    },
     srednjaOcena: function(id) {
 			
 			let srednjaVrednost = 0;
@@ -112,6 +141,7 @@ Vue.component("manifestation", {
       axios.get('/manifestation?id=' + id)
       .then(response => {
         this.manifestation = response.data;
+       
         this.nadjiLokaciju(id);
       })
       .catch(error =>{
@@ -120,6 +150,14 @@ Vue.component("manifestation", {
     }
   },
   mounted: function() {
+    this.kIme = window.localStorage.getItem('kIme');
+    this.role = window.localStorage.getItem('role');
+    if(this.role == 'kupac'){
+      axios.get('/userType',  {params:{korisnickoIme:this.kIme}})
+		      .then(response => {
+            this.typeUser = response.data;                    
+            });
+    }
     this.nadjiManifestaciju();      
     },
   beforeUpdate: function() {
@@ -155,7 +193,31 @@ Vue.component("manifestation", {
   <div class="container-fluid body-reg">
     <div class="card" style="margin-bottom:1em;" width="350em">
       <div class="card-header"  style="background-color:#1fb579; color:white">Pregled Manifestacije</div>
-     
+      <div id="myModal" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Rezervacija karti</h4>
+          </div>
+          <div class="modal-body">
+          <p class="lead my-3"> Izaberite tip karte</p>
+          <select v-model="reservation.cardType" class=" form-control jk sel"">
+            <option selected value="REGULAR">REGULAR</option>
+            <option value="VIP">VIP</option>
+            <option value="FANPIT">FAN PIT</option>
+          </select>
+          <p class="lead my-3">Kolicina:</p>
+          <input @change="racun"  type="number" name="quantity" v-model="reservation.quantity" id="quantity" placeholder="Kolicina" />
+          <p class="lead my-3">Cena :</p>
+          <input :disabled="true" type="text" name="price" v-model="reservation.price" id="price" />
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Zatvori</button>
+            <button :disabled="reservation.quantity > manifestation.slobodnaMesta ? true : false" type="button"  data-dismiss="modal" class="btn btn-success" @click="kupiKarte">Kupi</button>
+          </div>
+        </div>
+    </div>
+    </div>
+      </div>
       <div class="card-body" width="350em">
         <div class="row">
           <div class="img-square-wrapper list-group-item" style="margin-left: 9em; padding-top:3em;" hight="360em">
@@ -171,6 +233,7 @@ Vue.component("manifestation", {
               <li class="list-group-item">Slobodna mesta: {{manifestation.slobodnaMesta}}</li>
               <li class="list-group-item">Status: {{nadjiStatus()}}</li>
               <li class="list-group-item">Ocena: {{srednjaOcena(manifestation.id)}}</li>
+              <li v-if="role == 'kupac'" class="list-group-item"><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" :id = "manifestation.id">Rezervisi</button></li>
             </ul> 
           </div>
           <div class="list-group-item" style="margin-left:4em;">Lokacija: {{ location.adresa.drzava}}, {{location.adresa.mesto}}, {{ location.adresa.ulica }} {{location.adresa.broj}}

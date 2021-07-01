@@ -5,8 +5,8 @@
     "popust": 20.0,
     "trazeniBrojBodova": 50
   },
-  "none": {
-    "tip": "NONE",
+  "obican": {
+    "tip": "OBICAN",
     "popust": 0.0,
     "trazeniBrojBodova": 0
   },

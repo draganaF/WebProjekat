@@ -10,6 +10,7 @@ const AdminTableSuspiciousUsers = {template: '<adminTableSuspiciousUsers></admin
 const ManifestationsTable = {template: '<manifestationsTable></manifestationsTable>'}
 const Manifestation = {template: '<manifestation></manifestation>'}
 const SellerTableUsers = {template:'<sellerTableUsers></sellerTableUsers>'}
+const TicketUser = {template:'<ticketUser></ticketUser>'}
 
 const router = new VueRouter({
 	  mode: 'hash',
@@ -26,6 +27,7 @@ const router = new VueRouter({
 	    { path: '/manifestationsAdmin', component: ManifestationsTable},
 		{ path: '/manifestation/:id', component: Manifestation},
 		{ path: '/sellerTable', component: SellerTableUsers},
+		{ path: '/ticketUser', component: TicketUser}
 	  ]
 });
 
