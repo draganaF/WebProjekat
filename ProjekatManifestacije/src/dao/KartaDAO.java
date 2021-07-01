@@ -7,8 +7,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 
 import com.google.gson.Gson;
@@ -243,4 +247,90 @@ public class KartaDAO {
 		BufferedReader br = new BufferedReader(new FileReader("files/karte.json"));
 		this.karte = gson.fromJson(br, token);
 	}
+	
+	
+	public ArrayList<Karta> nadjiKarteKupca(ArrayList<String> kk){
+		ArrayList<Karta> karteIzabrane = new ArrayList<Karta>();
+		for(Karta k : karte) {
+			for(int i = 0; i< kk.size();i++) {
+				if(kk.get(i).equals(k.getId())) {
+					karteIzabrane.add(k);
+				}
+			}
+			
+		}
+		return karteIzabrane;
+	}
+	
+	public boolean odustaniOdKarte(String id, Manifestacija m) {
+		for(Karta k : karte) {
+			if(k.getId().equalsIgnoreCase(id)) {
+				ZoneId defaultZoneId = ZoneId.systemDefault();
+				LocalDate localDate = LocalDate.now();
+			    Date date = Date.from(localDate.atStartOfDay(defaultZoneId).toInstant());
+				double value = m.getDatum().getTime() - date.getTime();
+				int days = (int) (value / (1000*60*60*24));
+				if(days <= 7) {
+					return false;
+				}
+				k.setStatus(false);
+				k.setDatumOtkazivanja(date);
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	 static String napraviIdKarte()
+	    {
+	        String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	                                    + "abcdefghijklmnopqrstuvxyz";
+	        StringBuilder sb = new StringBuilder(10);
+	        for (int i = 0; i < 10; i++) {
+	            int index
+	                = (int)(AlphaNumericString.length()
+	                        * Math.random());
+	            sb.append(AlphaNumericString
+	                          .charAt(index));
+	        }
+	        return sb.toString();
+	    }
+	 
+	 
+	 public ArrayList<String> napraviKarte(String tipKarte, String kolicina, String korisnickoIme,int idManifestacije, float cena){
+		 ArrayList<String> listaId = new ArrayList<String>();
+		 
+		 int n = Integer.parseInt(kolicina);
+		 for(int i = 0;i<n;i++) {
+			 Karta k = new Karta();
+			 k.setId(napraviIdKarte());
+			 k.setDatumOtkazivanja(null);
+			 k.setKupac(korisnickoIme);
+			 k.setObrisana(false);
+			 k.setStatus(true);
+			 k.setManifestacija(idManifestacije);
+			 if(tipKarte.equals("REGULAR")) {
+				 k.setTipKarte(TipKarte.REGULAR);
+				 k.setCena(cena);
+			 }else if(tipKarte.equals("VIP")) {
+				 k.setTipKarte(TipKarte.VIP);
+				 k.setCena(4*cena);
+			 }else {
+				 k.setTipKarte(TipKarte.FANPIT);
+				 k.setCena(2*cena);
+			 }
+			 listaId.add(k.getId());
+			 karte.add(k); 
+		 }
+		 
+		 try {
+				upisiKarte();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		 
+		 return listaId;
+		 
+	 }
 }

@@ -112,7 +112,7 @@ public class KupacDAO {
 		tip.setImeTipa(Tip.OBICAN);
 		tip.setPopust(0);
 		tip.setTrazeniBrojBodova(0);
-		kupac.setTipKupca(tip);
+		kupac.setTipKupca("OBICAN");
 		kupci.put(kupac.getKorisnickoIme(),kupac);
 		try {
 			this.upisiKupce();
@@ -175,13 +175,61 @@ public class KupacDAO {
 	ArrayList<Kupac> lista = new ArrayList<Kupac>();
 	for(Karta karta : karte) {
 		for(Kupac k : kupci.values()) {
-			System.out.println(karta.getId());
 			if(karta.getKupac().equals(k.getKorisnickoIme()) && !k.isObrisan()) {
 				lista.add(k);
 			}
 		}
 	}
 	return lista;
+	}
+	
+	public void smanjiBodove(Kupac k, Karta karta) {
+		for(Kupac kupac : kupci.values()) {
+				if(kupac.getKorisnickoIme().equals(k.getKorisnickoIme())) {
+					int trenutniBodovi = kupac.getBrojSakupljenihBodova();
+					int noviBodovi = (int) (trenutniBodovi - ((karta.getCena()/1000)*133*4));
+					if(noviBodovi <0) {
+						kupac.setBrojSakupljenihBodova(0);
+					}else {
+						kupac.setBrojSakupljenihBodova(noviBodovi);
+					}
+					
+				}
+		}
+		try {
+			upisiKupce();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public void dodajKarteKupcu(ArrayList<String> karte, String tipKarte, float cena,int kolicina,String korisnickoIme) {
+		int value = 0;
+		if(tipKarte.equals("REGULAR")) {
+			value = (int) (((kolicina * cena)/1000) * 133*4);
+		}else if(tipKarte.equals("VIP")) {
+			value = (int) (((kolicina * cena)/1000) * 133*4 * 4);
+		}else {
+			value = (int) (((kolicina * cena)/1000) * 133*4 *2);
+		}
+		
+		Kupac k = nadjiKupcaProfil(korisnickoIme);
+		for(int i =0;i<karte.size();i++) {
+			k.getKarte().add(karte.get(i));
+		}
+		
+		k.setBrojSakupljenihBodova(k.getBrojSakupljenihBodova() +value);
+		
+		try {
+			upisiKupce();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 	}
 }
 
