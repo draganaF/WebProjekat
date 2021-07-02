@@ -642,7 +642,7 @@ public class ProjekatManifestacijeMain  {
 			komentariDAO.upisiKomentare();
 			return true;
 		});
-<<<<<<< HEAD
+
 		get("/commentsToApprove", (req, res) -> {
 			String username = req.queryParams("username");
 			HashMap<Integer, Manifestacija> manifestacije = manifestacijeDAO.getManifestacije();
@@ -772,7 +772,7 @@ public class ProjekatManifestacijeMain  {
 			return true;
 			
 		});
-=======
+
 		
 		
 		
@@ -850,7 +850,6 @@ public class ProjekatManifestacijeMain  {
 			
 		});
 		
->>>>>>> 5dbfbf9ca95c481ac0a41baf6cc2645a7ef20f3f
 	}
 
 }

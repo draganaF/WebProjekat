@@ -97,5 +97,7 @@ public class LokacijaDAO {
 		return maxValueKey + 1;
 	}
 
+	
+
 
 }

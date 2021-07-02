@@ -405,7 +405,6 @@ public class ManifestacijeDAO {
 		
 		return izabrane;
 	}
-<<<<<<< HEAD
 
 	public int nadjiSledeciId() {
 		int maxValueKey = Collections.max(this.manifestacije.keySet());
@@ -421,7 +420,6 @@ public class ManifestacijeDAO {
 		}
 		return false;
 	}
-=======
 	
 	public void  smanjiBrojMesta(int kolicina, Manifestacija manifestacija){
 		
@@ -440,5 +438,5 @@ public class ManifestacijeDAO {
 	}
 	
 }
->>>>>>> 5dbfbf9ca95c481ac0a41baf6cc2645a7ef20f3f
+
 }
