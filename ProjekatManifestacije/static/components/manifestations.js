@@ -243,7 +243,7 @@ Vue.component("manifestations", {
   mounted: function(){
 	this.username = window.localStorage.getItem('kIme');
 	this.role = window.localStorage.getItem('role');
-	if(this.role == "prodavac"){
+	/*if(this.role == "prodavac"){
 		axios.get("/sellerManifestations", {params:{korisnickoIme:this.username}})
 		.then(response => {
 			this.manifestationList = response.data;
@@ -252,7 +252,7 @@ Vue.component("manifestations", {
 			.then(response => {
 				this.locationList = response.data;
 			});
-	}else{
+	}else{*/
     axios.get("/manifestations")
 			.then(response => {
 				this.manifestationList = response.data;
@@ -267,11 +267,10 @@ Vue.component("manifestations", {
 			.then(response => {
 				this.oceneList = response.data;
 			});
-		}
+		//}
   },
   template: `
   <div class="card">
-		<div class="card-header" style="background-color:#1fb579; color:white">Manifestacije</div>
 		<div  class="row">
 			<div class="col-md-18 col-20" style="margin-left: 9.5em; margin-top: 2em">
 				<div class="row rone">

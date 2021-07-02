@@ -48,7 +48,7 @@ Vue.component("adminTableSuspiciousUsers", {
                 user.sumnjiv = response.data[i].sumnjiv;
                 user.blokiran = response.data[i].blokiran;
                 user.points = response.data[i].brojSakupljenihBodova;
-                user.type= response.data[i].tipKupca.tip;
+                user.type= response.data[i].tipKupca;
                 this.users.push(user);
             }
          
@@ -68,7 +68,7 @@ Vue.component("adminTableSuspiciousUsers", {
                     user.username = response.data[i].korisnickoIme;
                     user.role = "kupac";
                     user.points = response.data[i].brojSakupljenihBodova;
-                    user.type= response.data[i].tipKupca.tip;
+                    user.type= response.data[i].tipKupca;
                     user.sumnjiv = response.data[i].sumnjiv;
                     user.blokiran = response.data[i].blokiran;
                     this.users.push(user);
@@ -85,7 +85,7 @@ Vue.component("adminTableSuspiciousUsers", {
                     user.username = response.data[i].korisnickoIme;
                     user.role = "kupac";
                     user.points = response.data[i].brojSakupljenihBodova;
-                    user.type= response.data[i].tipKupca.tip;
+                    user.type= response.data[i].tipKupca;
                     user.sumnjiv = response.data[i].sumnjiv;
                     user.blokiran = response.data[i].blokiran;
                     this.users.push(user);

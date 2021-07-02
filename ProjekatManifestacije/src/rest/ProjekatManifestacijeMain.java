@@ -580,10 +580,16 @@ public class ProjekatManifestacijeMain  {
 			ArrayList<Kupac> sviKupci = kupacDAO.nadjiKupce(karte);
 			ArrayList<Kupac> kupci = new ArrayList<Kupac>();
 			for (Kupac k : sviKupci) {
-				if(k.getIme().contains(p) || k.getPrezime().contains(p) || k.getKorisnickoIme().contains(p) || k.getTipKupca().contains(t)) {
-						
+				if(p.equals("")) {
+					if( k.getTipKupca().contains(t)) {
 						kupci.add( k);
+					}
+				}else {
+					if(k.getIme().contains(p) || k.getPrezime().contains(p) || k.getKorisnickoIme().contains(p) || k.getTipKupca().contains(t)) {
+						kupci.add( k);
+						
 		    	}
+				}
 			}
 			return gsonReg.toJson(kupci);
 			
