@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 
@@ -15,6 +16,7 @@ import com.google.gson.reflect.TypeToken;
 
 import beans.Komentar;
 import beans.Kupac;
+import beans.Manifestacija;
 
 public class KomentarDAO {
 	private ArrayList<Komentar> komentari;
@@ -73,6 +75,17 @@ public class KomentarDAO {
 		ArrayList<Komentar> validni = new ArrayList<Komentar>();
 		for(Komentar k : this.mapaKomentara.values()) {
 			if(!k.isObrisan() && k.getKupac().equalsIgnoreCase(korisnickoIme)) {
+				validni.add(k);
+			}
+		}
+		return validni;
+	}
+	
+	public ArrayList<Komentar> komentariZaManifestacijeProdavca(HashMap<Integer, Manifestacija> manifestacije, String korisnickoIme) {
+		ArrayList<Komentar> validni = new ArrayList<Komentar>();
+		for(Komentar k : this.mapaKomentara.values()) {
+			
+			if(manifestacije.get(k.getManifestacija()).getProdavac().equals(korisnickoIme) && k.isOdobrena() == -1) {
 				validni.add(k);
 			}
 		}

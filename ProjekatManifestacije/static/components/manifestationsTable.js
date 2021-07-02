@@ -7,13 +7,17 @@ Vue.component("manifestationsTable", {
           sortCena:"",
           sortTip:"",
           sortStatus:"",
+          user: localStorage.getItem('kIme'),
+          role: localStorage.getItem('role'),
     };
     },
     mounted: function(){
         this.refresh();					
     },
     methods: {
-
+        addManifestation: function() {
+            router.push({ path: `/addManifestation/-1` })
+        },
         onPrihvati(event){
             choosenId = event.target.id;
               axios
@@ -28,6 +32,13 @@ Vue.component("manifestationsTable", {
                   console.log(err);
                 });
             
+        },
+        addManifestation() {
+            router.push({ path: `/addManifestation/-1` })
+        },
+        onEditManifestation(event){
+            let chosenId = event.target.id;
+            router.push({ path: `/addManifestation/${chosenId}` })
         },
         onOdbij(event){
             choosenId = event.target.id;
@@ -46,6 +57,7 @@ Vue.component("manifestationsTable", {
         refresh(){
             axios.get('/manifestations')
 		.then(response => {
+            if(this.user)
             this.manifestations = response.data;
          
         });
@@ -192,11 +204,14 @@ Vue.component("manifestationsTable", {
                             <td v-if="m.aktivnost == true && m.obrisana == false">Prihvacena</td>
                             <td v-if="m.obrisana != false && m.aktivnost != true"> Odbijena</td>
                             <td v-if="m.obrisana == false && m.aktivnost == false"> Ceka odgovor</td>
-                            <td><button v-if="m.aktivnost == false && m.obrisana == false" class="btn btn-success" @click="onPrihvati" :id="m.id">Prihvati</button> <button v-if="m.aktivnost == false && m.obrisana ==false" class="btn btn-danger" @click="onOdbij" :id="m.id">Odbij</button></td>
+                            <td v-if="m.aktivnost == false && m.obrisana == false && role=='admin'"><button  class="btn btn-success" @click="onPrihvati" :id="m.id">Prihvati</button></td>
+                            <td v-if="m.aktivnost == false && m.obrisana ==false && role=='admin'"> <button  class="btn btn-danger" @click="onOdbij" :id="m.id">Odbij</button></td>
+                            <td v-if="role == 'prodavac' && m.obrisana == false && user==m.prodavac"><button  class="btn btn-success" @click="onEditManifestation" :id="m.id">Izmeni</button></td>
    
                             </tr>
 
                     </table>
+                    <button @click="addManifestation" class="btn btn-success">Dodaj manifestaciju</button>
           
                 </div>
             </div>

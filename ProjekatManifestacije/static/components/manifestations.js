@@ -308,7 +308,7 @@ Vue.component("manifestations", {
 							<li class="list-group-item">Tip: {{ manifestation.tipManifestacije }}</li>
 							<li class="list-group-item">Datum i vreme: {{ manifestation.datum }}</li>
 							<li class="list-group-item">Cena regularne karte: {{ manifestation.cenaKarte }}</li>
-							<li class="list-group-item">Lokacija: {{ (manifestationLocation(manifestation.lokacija)).adresa.drzava}}, {{(manifestationLocation(manifestation.lokacija)).adresa.mesto}}, {{ (manifestationLocation(manifestation.lokacija)).adresa.ulica}}</li>
+							<li class="list-group-item">Lokacija: {{ (manifestationLocation(manifestation.lokacija)).adresa.drzava}}, {{(manifestationLocation(manifestation.lokacija)).adresa.mesto}}, {{ (manifestationLocation(manifestation.lokacija)).adresa.ulica}}, {{ (manifestationLocation(manifestation.lokacija)).adresa.broj}} </li>
 							<li class="list-group-item">Ocena: {{srednjaOcena(manifestation.id)}}</li>
 							<li class="list-group-item"><button type="button" class="btn btn-outline-dark" v-on:click="detaljanPregled(manifestation.id)">Detaljan pregled</button></li>
 						</ul>

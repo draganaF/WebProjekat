@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,6 +15,7 @@ import com.google.gson.reflect.TypeToken;
 
 import beans.Adresa;
 import beans.Lokacija;
+import beans.Manifestacija;
 import beans.Prodavac;
 
 public class LokacijaDAO {
@@ -78,6 +80,21 @@ public class LokacijaDAO {
 		BufferedReader br = new BufferedReader(new FileReader("files/lokacije.json"));
 		this.lokacije = gson.fromJson(br, token);
 		
+	}
+
+	public boolean checkLocation(Lokacija location) {
+		for(Lokacija l : this.lokacije.values()) {
+			if(l.getGeografskaDuzina() == location.getGeografskaDuzina() && location.getGeografskaSirina() == l.getGeografskaDuzina()
+				|| (l.getAdresa().getDrzava().equals(location.getAdresa().getDrzava()) && l.getAdresa().getMesto().equalsIgnoreCase(location.getAdresa().getMesto()) && 
+					l.getAdresa().getUlica().equalsIgnoreCase(location.getAdresa().getUlica()) && location.getAdresa().getBroj() == l.getAdresa().getBroj() )) {
+				return false;
+			}
+		}
+		return true;
+	}
+	public int nadjiSledeciId() {
+		int maxValueKey = Collections.max(this.lokacije.keySet());
+		return maxValueKey + 1;
 	}
 
 
