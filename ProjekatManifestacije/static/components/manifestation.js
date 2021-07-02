@@ -9,11 +9,8 @@ Vue.component("manifestation", {
       role: "",
       canComment: false,
       canApprove: false,
-<<<<<<< HEAD
       user: localStorage.getItem('kIme'),
-=======
-      user: "",
->>>>>>> 5dbfbf9ca95c481ac0a41baf6cc2645a7ef20f3f
+
       contentComment: "",
       commentGrade: -1,
       errorMessage: "",
