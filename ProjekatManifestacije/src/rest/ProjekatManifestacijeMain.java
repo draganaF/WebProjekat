@@ -4,12 +4,16 @@ import static spark.Spark.port;
 import static spark.Spark.post;
 import static spark.Spark.staticFiles;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.imageio.ImageIO;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -17,7 +21,9 @@ import com.google.gson.GsonBuilder;
 import beans.Administrator;
 import beans.Korisnik;
 import beans.Kupac;
+import beans.Lokacija;
 import beans.Manifestacija;
+import beans.ManifestacijaDAO;
 import beans.Prodavac;
 import beans.Karta;
 import beans.Komentar;
@@ -576,6 +582,135 @@ public class ProjekatManifestacijeMain  {
 			komentariDAO.odobriKomentar(id, approve);
 			komentariDAO.upisiKomentare();
 			return true;
+		});
+		get("/commentsToApprove", (req, res) -> {
+			String username = req.queryParams("username");
+			HashMap<Integer, Manifestacija> manifestacije = manifestacijeDAO.getManifestacije();
+			
+			return g.toJson(komentariDAO.komentariZaManifestacijeProdavca(manifestacije, username));
+		});
+		
+		get("/getManifestation", (req, res) -> {
+			int id = Integer.parseInt(req.queryParams("id"));
+			return g.toJson(manifestacijeDAO.nadjiManifestaciju(id));
+		});
+		post("/updateManifestation", (req, res) -> {
+			String reqBody = req.body();
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'hh:mm").create();
+			
+			ManifestacijaDAO m = gsonReg.fromJson(reqBody, ManifestacijaDAO.class);
+			Lokacija lokacija = m.getLokacija();
+			HashMap<Integer, Lokacija> lokacije = lokacijeDAO.getLokacije();
+			for(Lokacija l : lokacije.values()) {
+				if(l.getId() == lokacija.getId()) {
+					l.setGeografskaDuzina(lokacija.getGeografskaDuzina());
+					l.setGeografskaSirina(lokacija.getGeografskaSirina());
+					l.setAdresa(lokacija.getAdresa());
+					break;
+				}
+			}
+			lokacijeDAO.setLokacije(lokacije);
+			lokacijeDAO.upisiLokacije();
+			
+			Manifestacija manifestacija = m.getManifestacija();
+			if(manifestacija.getBrojMesta() < manifestacija.getSlobodnaMesta()) {
+				return false;
+			}
+			
+			if(!(manifestacija.getSlika().split(",")[1]).equals("")) {
+				String imageString = manifestacija.getSlika().split(",")[1];
+				BufferedImage image = null;
+	            byte[] imageByte;
+	 
+	            
+	            imageByte = Base64.getDecoder().decode(imageString);
+	            ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
+	            image = ImageIO.read(bis);
+	            bis.close();
+	            String imageName= "manifestacija" + manifestacija.getId() + ".png";
+	            
+	            File outputfile = new File(System.getProperty("user.dir")+ "\\static\\images\\" + imageName);
+	            ImageIO.write(image, "png", outputfile);
+	            
+	            manifestacija.setSlika("../images/" + imageName);
+			}
+		
+			
+			
+			HashMap<Integer, Manifestacija> manifestacije = manifestacijeDAO.getManifestacije();
+			for(Manifestacija mm : manifestacije.values()) {
+				if(mm.getId() == manifestacija.getId()) {
+					mm.setAktivnost(manifestacija.isAktivnost());
+					mm.setBrojMesta(manifestacija.getBrojMesta());
+					mm.setCenaKarte(manifestacija.getCenaKarte());
+					mm.setDatum(manifestacija.getDatum());
+					mm.setLokacija(lokacija.getId());
+					mm.setNaziv(manifestacija.getNaziv());
+					mm.setSlika(manifestacija.getSlika());
+					mm.setSlobodnaMesta(manifestacija.getSlobodnaMesta());
+					mm.setStatus(manifestacija.isStatus());
+					mm.setTipManifestacije(manifestacija.getTipManifestacije());
+					
+					break;
+				}
+			}
+			
+			manifestacijeDAO.setManifestacije(manifestacije);
+			manifestacijeDAO.upisiManifestacije();
+			
+			return true;
+		});
+		post("/createManifestation", (req, res) -> {
+			String reqBody = req.body();
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'hh:mm").create();
+			
+			ManifestacijaDAO m = gsonReg.fromJson(reqBody, ManifestacijaDAO.class);
+			int lokacijaId = lokacijeDAO.nadjiSledeciId();
+			Lokacija lokacija = m.getLokacija();
+			lokacija.setId(lokacijaId);
+			
+			if(lokacijeDAO.checkLocation(lokacija)) {
+				return false;
+			}
+			
+			int id = manifestacijeDAO.nadjiSledeciId();
+			Manifestacija manifestacija = m.getManifestacija();
+			manifestacija.setId(id);
+			manifestacija.setLokacija(lokacijaId);
+		
+			String imageString = manifestacija.getSlika().split(",")[1];
+			BufferedImage image = null;
+            byte[] imageByte;
+ 
+            
+            imageByte = Base64.getDecoder().decode(imageString);
+            ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
+            image = ImageIO.read(bis);
+            bis.close();
+            String imageName= "manifestacije" + id + ".png";
+            
+            
+			if(manifestacijeDAO.checkAvaiability(manifestacija)) {
+				File outputfile = new File(System.getProperty("user.dir")+ "\\static\\images\\" + imageName);
+	            ImageIO.write(image, "png", outputfile);
+	            
+	            manifestacija.setSlika("../images/" + imageName);
+				HashMap<Integer, Manifestacija> manifestacije = manifestacijeDAO.getManifestacije();
+				manifestacije.put(id, manifestacija);
+				manifestacijeDAO.setManifestacije(manifestacije);
+				manifestacijeDAO.upisiManifestacije();
+			}
+			else {
+				return false;
+			}
+			
+			HashMap<Integer, Lokacija> lokacije = lokacijeDAO.getLokacije();
+			lokacije.put(lokacijaId, lokacija);
+			lokacijeDAO.setLokacije(lokacije);
+			lokacijeDAO.upisiLokacije();
+			
+			return true;
+			
 		});
 	}
 

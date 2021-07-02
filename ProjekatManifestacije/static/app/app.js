@@ -9,6 +9,8 @@ const AdminTableUsers = {template: '<adminTableUsers></adminTableUsers>'}
 const AdminTableSuspiciousUsers = {template: '<adminTableSuspiciousUsers></adminTableSuspiciousUsers>'}
 const ManifestationsTable = {template: '<manifestationsTable></manifestationsTable>'}
 const Manifestation = {template: '<manifestation></manifestation>'}
+const CommentApproval = {template: '<comment-approval></comment-approval>'}
+const AddManifestation = {template: '<add-manifestation></add-manifestation>'}
 
 const router = new VueRouter({
 	  mode: 'hash',
@@ -16,7 +18,7 @@ const router = new VueRouter({
 	    { path: '/reg', component: Registration},
 	    { path: '/login', component: Login},
 	    { path: '/home', component: HomePage},
-		{ path: '/manifestations', component: Manifestations},
+		  { path: '/manifestations', component: Manifestations},
 	    { path: '/profile', component: Profile},
 	    { path: '/changePassword', component:ChangePassword},
 	    { path: '/registrationSeller', component:RegistrationSeller},
@@ -24,6 +26,8 @@ const router = new VueRouter({
 	    { path: '/adminSuspiciousUsers', component: AdminTableSuspiciousUsers},
 	    { path: '/manifestationsAdmin', component: ManifestationsTable},
 			{ path: '/manifestation/:id', component: Manifestation},
+			{ path: '/approveComments', component: CommentApproval},
+			{ path: '/addManifestation/:id', component: AddManifestation},
 	  ]
 });
 

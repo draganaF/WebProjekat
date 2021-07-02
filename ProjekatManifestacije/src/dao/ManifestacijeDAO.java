@@ -10,6 +10,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,6 +38,10 @@ public class ManifestacijeDAO {
 	
 	public HashMap<Integer,Manifestacija> getManifestacije(){
 		return manifestacije;
+	}
+	
+	public void setManifestacije(HashMap<Integer,Manifestacija> manifestacije) {
+		this.manifestacije = manifestacije; 
 	}
 	
 	public ArrayList<Manifestacija> sveValidne(){
@@ -399,5 +404,20 @@ public class ManifestacijeDAO {
 		
 		
 		return izabrane;
+	}
+
+	public int nadjiSledeciId() {
+		int maxValueKey = Collections.max(this.manifestacije.keySet());
+		return maxValueKey + 1;
+	}
+
+	@SuppressWarnings("deprecation")
+	public boolean checkAvaiability(Manifestacija manifestacija) {
+		for(Manifestacija m : this.manifestacije.values()) {
+			if(m.getDatum().getDate() == manifestacija.getDatum().getDate() && m.getDatum().getMonth() == manifestacija.getDatum().getMonth()) {
+				return false;
+			}
+		}
+		return false;
 	}
 }

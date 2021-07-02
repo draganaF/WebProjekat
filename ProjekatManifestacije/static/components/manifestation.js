@@ -9,7 +9,7 @@ Vue.component("manifestation", {
       role: localStorage.getItem('role'),
       canComment: false,
       canApprove: false,
-      user: localStorage.getItem('krIme'),
+      user: localStorage.getItem('kIme'),
       contentComment: "",
       commentGrade: -1,
       errorMessage: "",
@@ -28,7 +28,7 @@ Vue.component("manifestation", {
       if(this.contentComment) {
         axios
         .post('/addComment', {id: -1, 
-                    kupac: "jova96",
+                    kupac: this.user,
                     manifestacija: this.manifestation.id,
                     tekst: this.contentComment,
                     ocena: this.commentGrade,
@@ -108,6 +108,7 @@ Vue.component("manifestation", {
       });
     },
     nadjiManifestaciju: function() {
+      console.log(this.user);
       let id = this.$route.params.id;
       axios.get('/manifestation?id=' + id)
       .then(response => {
@@ -153,7 +154,7 @@ Vue.component("manifestation", {
   },
   template: `
   <div class="container-fluid body-reg">
-    <div class="card" style="margin-bottom:1em;" width="350em">
+    <div class="card" style="margin-bottom:1em;">
       <div class="card-header"  style="background-color:#1fb579; color:white">Pregled Manifestacije</div>
      
       <div class="card-body" width="350em">
