@@ -30,7 +30,7 @@ Vue.component("sellerTableUsers", {
                 user.sumnjiv = response.data[i].sumnjiv;
                 user.blokiran = response.data[i].blokiran;
                 user.points = response.data[i].brojSakupljenihBodova;
-                user.type= response.data[i].tipKupca.tip;
+                user.type= response.data[i].tipKupca;
                 user.role = "kupac";
                 this.users.push(user);
             }
@@ -51,7 +51,7 @@ Vue.component("sellerTableUsers", {
                     user.username = response.data[i].korisnickoIme;
                     user.role = "kupac";
                     user.points = response.data[i].brojSakupljenihBodova;
-                    user.type= response.data[i].tipKupca.tip;
+                    user.type= response.data[i].tipKupca;
                     user.sumnjiv = response.data[i].sumnjiv;
                     user.blokiran = response.data[i].blokiran;
                     this.users.push(user);
@@ -67,7 +67,7 @@ Vue.component("sellerTableUsers", {
                         user.lastName = response.data[i].prezime;
                         user.username = response.data[i].korisnickoIme;
                         user.points = response.data[i].brojSakupljenihBodova;
-                        user.type= response.data[i].tipKupca.tip;
+                        user.type= response.data[i].tipKupca;
                         user.sumnjiv = response.data[i].sumnjiv;
                         user.blokiran = response.data[i].blokiran;
                         this.users.push(user);
@@ -219,7 +219,7 @@ Vue.component("sellerTableUsers", {
                         </form>
                     </div>
                     <div class="col-4">
-                        <select v-model="tip" class="sel" @change="search">
+                        <select v-model="tip" class="form-control jk" @change="search">
                         <option value="" selected>Svi</option>
                         <option value="OBICAN" >Obican</option>
                         <option value="SREBRNI">Srebrni</option>

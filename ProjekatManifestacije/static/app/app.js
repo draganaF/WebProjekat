@@ -15,14 +15,14 @@ const AddManifestation = {template: '<add-manifestation></add-manifestation>'}
 
 const SellerTableUsers = {template:'<sellerTableUsers></sellerTableUsers>'}
 const TicketUser = {template:'<ticketUser></ticketUser>'}
-
+const Tickets = {template:'<tickets></tickets>'}
 
 const router = new VueRouter({
 	  mode: 'hash',
 	  routes: [
 	    { path: '/reg', component: Registration},
 	    { path: '/login', component: Login},
-	    { path: '/home', component: HomePage},
+	    { path: '/', component: HomePage, redirect:'/manifestations'},
 		  { path: '/manifestations', component: Manifestations},
 	    { path: '/profile', component: Profile},
 	    { path: '/changePassword', component:ChangePassword},
@@ -34,7 +34,9 @@ const router = new VueRouter({
 			{ path: '/approveComments', component: CommentApproval},
 			{ path: '/addManifestation/:id', component: AddManifestation},
 			{ path: '/sellerTable', component: SellerTableUsers},
-			{ path: '/ticketUser', component: TicketUser}
+			{ path: '/ticketUser', component: TicketUser},
+			{ path: '/tickets', component: Tickets}
+			
 	  ]
 });
 
