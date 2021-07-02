@@ -147,7 +147,7 @@ public class ManifestacijeDAO {
 		this.manifestacije = gson.fromJson(br, token);
 	}
 	
-	public ArrayList<Manifestacija> pretraga(String filterAvaiable, String filterType, String searchName, String searchLocation, String searchPriceFrom, String searchPriceTo, String searchDateFrom, String searchDateTo) throws ParseException{
+	public ArrayList<Manifestacija> pretraga(HashMap<Integer,Manifestacija> pretraziManifestacije,String filterAvaiable, String filterType, String searchName, String searchLocation, String searchPriceFrom, String searchPriceTo, String searchDateFrom, String searchDateTo) throws ParseException{
 		ArrayList<Manifestacija> validne = new ArrayList<Manifestacija>();
 		Date dateFrom = new Date();
 		Date dateTo = new Date();
@@ -186,7 +186,7 @@ public class ManifestacijeDAO {
 		
 		//System.out.println(filterAvaiable+ " " + filterType + " " + dateFrom + " " + dateTo + " " + searchName + " " + searchLocation + " "+ priceFrom + " " + priceTo + " ");
 
-		for(Manifestacija m : manifestacije.values()) 
+		for(Manifestacija m : pretraziManifestacije.values()) 
 		{
 			if(!m.isObrisana()) 
 			{
@@ -392,12 +392,12 @@ public class ManifestacijeDAO {
 	
 	
 
-	public ArrayList<Manifestacija> nadjiManifestacijeId(ArrayList<Integer> man) {
-		ArrayList<Manifestacija> izabrane = new ArrayList<Manifestacija>();
+	public HashMap<Integer,Manifestacija> nadjiManifestacijeId(ArrayList<Integer> man) {
+		HashMap<Integer,Manifestacija> izabrane = new HashMap<Integer,Manifestacija>();
 		for(Manifestacija m : manifestacije.values()) {
 			for(int i = 0; i< man.size();i++) {
 				if(man.get(i) == m.getId()) {
-					izabrane.add(m);
+					izabrane.put(m.getId(),m);
 				}
 			}
 		}
@@ -405,6 +405,7 @@ public class ManifestacijeDAO {
 		
 		return izabrane;
 	}
+<<<<<<< HEAD
 
 	public int nadjiSledeciId() {
 		int maxValueKey = Collections.max(this.manifestacije.keySet());
@@ -420,4 +421,24 @@ public class ManifestacijeDAO {
 		}
 		return false;
 	}
+=======
+	
+	public void  smanjiBrojMesta(int kolicina, Manifestacija manifestacija){
+		
+		for(Manifestacija m : manifestacije.values()) {
+			if(m.getId() == manifestacija.getId()) {
+				int brojMesta = m.getSlobodnaMesta();
+				m.setSlobodnaMesta(brojMesta-kolicina);
+				
+			}
+		}
+	try {
+		upisiManifestacije();
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	
+}
+>>>>>>> 5dbfbf9ca95c481ac0a41baf6cc2645a7ef20f3f
 }

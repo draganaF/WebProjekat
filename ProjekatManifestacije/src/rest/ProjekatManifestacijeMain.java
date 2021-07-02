@@ -25,6 +25,7 @@ import beans.Lokacija;
 import beans.Manifestacija;
 import beans.ManifestacijaDAO;
 import beans.Prodavac;
+import beans.TipKupca;
 import beans.Karta;
 import beans.Komentar;
 import dao.AdministratorDAO;
@@ -35,6 +36,7 @@ import dao.KupacDAO;
 import dao.LokacijaDAO;
 import dao.ManifestacijeDAO;
 import dao.ProdavacDAO;
+import dao.TipKupcaDAO;
 
 public class ProjekatManifestacijeMain  {
 
@@ -46,6 +48,7 @@ public class ProjekatManifestacijeMain  {
 	private static ManifestacijeDAO manifestacijeDAO = new ManifestacijeDAO();
 	private static LokacijaDAO lokacijeDAO = new LokacijaDAO();
 	private static KomentarDAO komentariDAO = new KomentarDAO();
+	private static TipKupcaDAO tipKupcaDAO = new  TipKupcaDAO();
 
 	
 	public static void main(String[] args) throws IOException {
@@ -123,8 +126,10 @@ public class ProjekatManifestacijeMain  {
 			String searchPriceTo = (req.queryParams("searchPriceTo")).strip();
 			String searchLocation = (req.queryParams("searchLocation")).strip();
 			String searchName = (req.queryParams("searchName")).strip();
-			return g.toJson(manifestacijeDAO.pretraga(filterAvaible, filterType, searchName, searchLocation, searchPriceFrom, searchPriceTo, searchDateFrom, searchDateTo));
+			HashMap<Integer,Manifestacija> manifestacije = manifestacijeDAO.getManifestacije();
+			return g.toJson(manifestacijeDAO.pretraga(manifestacije,filterAvaible, filterType, searchName, searchLocation, searchPriceFrom, searchPriceTo, searchDateFrom, searchDateTo));
 		});
+		
 
 		get("/profile", (req, res)->{
 			String kIme =  req.queryParams("korisnickoIme");
@@ -275,7 +280,7 @@ public class ProjekatManifestacijeMain  {
 			if(u.equals("kupac") || u.equals("")) {
 				for (Map.Entry<String, Kupac> entry : kupacDAO.getKupci().entrySet()) {
 					
-					if((entry.getValue().getIme().contains(p) || entry.getValue().getPrezime().contains(p) || entry.getValue().getKorisnickoIme().contains(p) || entry.getValue().getTipKupca().getImeTipa().toString().contains(t)) && !entry.getValue().isObrisan())
+					if((entry.getValue().getIme().contains(p) || entry.getValue().getPrezime().contains(p) || entry.getValue().getKorisnickoIme().contains(p) || entry.getValue().getTipKupca().contains(t)) && !entry.getValue().isObrisan())
 						
 						kupci.add( entry.getValue());
 		    	}	
@@ -339,7 +344,7 @@ public class ProjekatManifestacijeMain  {
 			
 			ArrayList<Kupac> kupci = new ArrayList<Kupac>();
 				for (Map.Entry<String, Kupac> entry : kupacDAO.getKupci().entrySet()) {
-					if((entry.getValue().getIme().contains(p) || entry.getValue().getPrezime().contains(p) || entry.getValue().getKorisnickoIme().contains(p) || entry.getValue().getTipKupca().getImeTipa().toString().contains(t)) && !entry.getValue().isObrisan() && entry.getValue().isSumnjiv())
+					if((entry.getValue().getIme().contains(p) || entry.getValue().getPrezime().contains(p) || entry.getValue().getKorisnickoIme().contains(p) || entry.getValue().getTipKupca().contains(t)) && !entry.getValue().isObrisan() && entry.getValue().isSumnjiv())
 						
 						kupci.add( entry.getValue());
 		    	}	
@@ -407,7 +412,7 @@ public class ProjekatManifestacijeMain  {
 		get("/reservedTickets", (req, res) -> {
 			String korisnickoIme =  req.queryParams("korisnickoIme");
 			Prodavac p = prodavacDAO.nadjiProdavcaProfil(korisnickoIme);
-			ArrayList<Manifestacija> manifestacije = manifestacijeDAO.nadjiManifestacijeId(p.getManifestacije());
+			HashMap<Integer,Manifestacija> manifestacije = manifestacijeDAO.nadjiManifestacijeId(p.getManifestacije());
 			return g.toJson(kartaDAO.rezervisaneKarte(manifestacije));
 		});
 		
@@ -423,8 +428,11 @@ public class ProjekatManifestacijeMain  {
 			ArrayList<Karta> rezervisaneProdavac = new ArrayList<Karta>();
 			if(role.equals("prodavac")) {
 				Prodavac p = prodavacDAO.nadjiProdavcaProfil(korisnickoIme);
-				ArrayList<Manifestacija> manifestacije = manifestacijeDAO.nadjiManifestacijeId(p.getManifestacije());
+				HashMap<Integer,Manifestacija> manifestacije = manifestacijeDAO.nadjiManifestacijeId(p.getManifestacije());
 				rezervisaneProdavac = kartaDAO.rezervisaneKarte(manifestacije);
+			}else if(role.equals("kupac")) {
+				Kupac k = kupacDAO.nadjiKupcaProfil(korisnickoIme);
+				rezervisaneProdavac = kartaDAO.nadjiKarteKupca(k.getKarte());
 			}
 			
 			String status =  req.queryParams("status");
@@ -436,14 +444,14 @@ public class ProjekatManifestacijeMain  {
 				if(pretragaDatumOd.equals("") || pretragaDatumDo.equals("")) {
 					if(role.equals("admin")) {
 						tempKarte = kartaDAO.nadjiPoParametrima(kartaDAO.getKarte(),tip,status);
-					}else if(role.equals("prodavac")){
+					}else if(role.equals("prodavac") || role.equals("kupac")){
 						tempKarte = kartaDAO.nadjiPoParametrima(rezervisaneProdavac,tip,status);
 					}
 					if(tempKarte.size() == 0) {
 						if(role.equals("admin")) {
 							karte = manifestacijeDAO.nadjiPoNazivu(kartaDAO.getKarte(),pretragaManifestacija);
 							return  gsonReg.toJson(karte);
-						}else if(role.equals("prodavac")){
+						}else if(role.equals("prodavac") || role.equals("kupac")){
 							karte = manifestacijeDAO.nadjiPoNazivu(rezervisaneProdavac,pretragaManifestacija);
 							return  gsonReg.toJson(karte);
 						}
@@ -461,14 +469,14 @@ public class ProjekatManifestacijeMain  {
 				}else {
 					if(role.equals("admin")) {
 						tempKarte = kartaDAO.nadjiPoParametrima(kartaDAO.getKarte(), tip,status);
-					}else if(role.equals("prodavac")) {
+					}else if(role.equals("prodavac") || role.equals("kupac")) {
 						tempKarte = kartaDAO.nadjiPoParametrima(rezervisaneProdavac, tip,status);
 					}
 					if(tempKarte.size() == 0) {
 						if(role.equals("admin")) {
 							karte = manifestacijeDAO.nadjiPoDatumima(kartaDAO.getKarte(),pretragaDatumOd, pretragaDatumDo, pretragaManifestacija);
 							return  gsonReg.toJson(karte);
-						}else if(role.equals("prodavac")) {
+						}else if(role.equals("prodavac") || role.equals("kupac")) {
 							karte = manifestacijeDAO.nadjiPoDatumima(rezervisaneProdavac,pretragaDatumOd, pretragaDatumDo, pretragaManifestacija);
 							return  gsonReg.toJson(karte);
 						}
@@ -488,14 +496,14 @@ public class ProjekatManifestacijeMain  {
 				if(pretragaDatumOd.equals("") || pretragaDatumDo.equals("")) {
 					if(role.equals("admin")) {
 						tempKarte = kartaDAO.nadjiPoCeniStatusuTipu(kartaDAO.getKarte(), tip,status,pretragaCenaOd, pretragaCenaDo);
-					}else if(role.equals("prodavac")) {
+					}else if(role.equals("prodavac") || role.equals("kupac")) {
 						tempKarte = kartaDAO.nadjiPoCeniStatusuTipu(rezervisaneProdavac, tip,status,pretragaCenaOd, pretragaCenaDo);
 					}
 					if(tempKarte.size() == 0) {
 						if(role.equals("admin")) {
 							karte = manifestacijeDAO.nadjiPoNazivu(kartaDAO.getKarte(),pretragaManifestacija);
 							return  gsonReg.toJson(karte);
-						}else if(role.equals("prodavac")) {
+						}else if(role.equals("prodavac") || role.equals("kupac")) {
 							karte = manifestacijeDAO.nadjiPoNazivu(rezervisaneProdavac,pretragaManifestacija);
 							return  gsonReg.toJson(karte);
 						}
@@ -512,14 +520,14 @@ public class ProjekatManifestacijeMain  {
 				}else {
 					if(role.equals("admin")) {
 						tempKarte = kartaDAO.nadjiPoCeniStatusuTipu(kartaDAO.getKarte(), tip,status,pretragaCenaOd, pretragaCenaDo);
-					}else if(role.equals("prodavac")) {
+					}else if(role.equals("prodavac") || role.equals("kupac")) {
 						tempKarte = kartaDAO.nadjiPoCeniStatusuTipu(rezervisaneProdavac, tip,status,pretragaCenaOd, pretragaCenaDo);
 					}
 					if(tempKarte.size() == 0) {
 						if(role.equals("admin")) {
 							karte = manifestacijeDAO.nadjiPoDatumima(kartaDAO.getKarte(),pretragaDatumOd, pretragaDatumDo,pretragaManifestacija);
 							return  gsonReg.toJson(karte);
-						}else if(role.equals("prodavac")) {
+						}else if(role.equals("prodavac") || role.equals("kupac")) {
 							karte = manifestacijeDAO.nadjiPoDatumima(rezervisaneProdavac,pretragaDatumOd, pretragaDatumDo,pretragaManifestacija);
 							return  gsonReg.toJson(karte);
 						}
@@ -550,6 +558,57 @@ public class ProjekatManifestacijeMain  {
 			manifestacijeDAO.promeniBrojMesta(m);
 			return true;
 			
+		});
+		
+		get("/sellerManifestationsUsers", (req, res) -> {
+			String korisnickoIme =  req.queryParams("korisnickoIme");
+			Prodavac p = prodavacDAO.nadjiProdavcaProfil(korisnickoIme);
+			HashMap<Integer,Manifestacija> manifestacije = manifestacijeDAO.nadjiManifestacijeId(p.getManifestacije());
+			ArrayList<Karta> karte = kartaDAO.rezervisaneKarte(manifestacije);
+			return g.toJson(kupacDAO.nadjiKupce(karte));
+		});
+		
+		get("/searchUser", (req, res)->{
+			String p =  req.queryParams("pretraga");
+			String kIme =  req.queryParams("korisnickoIme");
+			String t =  req.queryParams("tip");
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd hh:mm").create();
+			
+			Prodavac prodavac = prodavacDAO.nadjiProdavcaProfil(kIme);
+			HashMap<Integer,Manifestacija> manifestacije = manifestacijeDAO.nadjiManifestacijeId(prodavac.getManifestacije());
+			ArrayList<Karta> karte = kartaDAO.rezervisaneKarte(manifestacije);
+			ArrayList<Kupac> sviKupci = kupacDAO.nadjiKupce(karte);
+			ArrayList<Kupac> kupci = new ArrayList<Kupac>();
+			for (Kupac k : sviKupci) {
+				if(k.getIme().contains(p) || k.getPrezime().contains(p) || k.getKorisnickoIme().contains(p) || k.getTipKupca().contains(t)) {
+						
+						kupci.add( k);
+		    	}
+			}
+			return gsonReg.toJson(kupci);
+			
+		});
+		
+		get("/sellerManifestations", (req, res) -> {
+			String korisnickoIme =  req.queryParams("korisnickoIme");
+			Prodavac p = prodavacDAO.nadjiProdavcaProfil(korisnickoIme);
+			HashMap<Integer,Manifestacija> manifestacije = manifestacijeDAO.nadjiManifestacijeId(p.getManifestacije());
+			return g.toJson(manifestacije.values());
+		});
+		
+		get("/searchManifestationsSeller", (req, res) -> {
+			String filterAvaible = req.queryParams("filterAvaiable");
+			String filterType = req.queryParams("filterType");
+			String searchDateFrom = req.queryParams("searchDateFrom");
+			String searchDateTo = req.queryParams("searchDateTo");
+			String searchPriceFrom = req.queryParams("searchPriceFrom");
+			String searchPriceTo = req.queryParams("searchPriceTo");
+			String searchLocation = req.queryParams("searchLocation");
+			String searchName = req.queryParams("searchName");
+			String korisnickoIme = req.queryParams("korisnickoIme");
+			Prodavac p = prodavacDAO.nadjiProdavcaProfil(korisnickoIme);
+			HashMap<Integer,Manifestacija> manifestacije = manifestacijeDAO.nadjiManifestacijeId(p.getManifestacije());
+			return g.toJson(manifestacijeDAO.pretraga(manifestacije,filterAvaible, filterType, searchName, searchLocation, searchPriceFrom, searchPriceTo, searchDateFrom, searchDateTo));
 		});
 		
 		get("/manifestationTickets", (req, res) -> {
@@ -583,6 +642,7 @@ public class ProjekatManifestacijeMain  {
 			komentariDAO.upisiKomentare();
 			return true;
 		});
+<<<<<<< HEAD
 		get("/commentsToApprove", (req, res) -> {
 			String username = req.queryParams("username");
 			HashMap<Integer, Manifestacija> manifestacije = manifestacijeDAO.getManifestacije();
@@ -712,6 +772,85 @@ public class ProjekatManifestacijeMain  {
 			return true;
 			
 		});
+=======
+		
+		
+		
+		get("/userTickets", (req, res) -> {
+			String korisnickoIme =  req.queryParams("korisnickoIme");
+			Kupac k  = kupacDAO.nadjiKupcaProfil(korisnickoIme);
+			ArrayList<Karta> karte = kartaDAO.nadjiKarteKupca(k.getKarte());
+			return g.toJson(karte);
+		});
+		
+		post("/cancelTicket", (req, res)-> {
+			String korisnickoIme = req.queryParams("korisnickoIme");
+			String id =  req.queryParams("id");
+			Karta karta = kartaDAO.nadjiKartu(id);
+			Kupac kupac = kupacDAO.nadjiKupcaProfil(korisnickoIme);
+			Manifestacija m = manifestacijeDAO.nadjiManifestaciju(karta.getManifestacija());
+			boolean value = kartaDAO.odustaniOdKarte(id, m);
+			if(value) {
+				try {
+					kartaDAO.upisiKarte();
+					manifestacijeDAO.promeniBrojMesta(m);
+					kupacDAO.smanjiBodove(kupac, karta);
+				} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				}
+			}else {
+				return false;
+			}
+			
+			return true;
+			
+		});
+		
+		get("/userType", (req, res) -> {
+			String korisnickoIme =  req.queryParams("korisnickoIme");
+			Kupac k  = kupacDAO.nadjiKupcaProfil(korisnickoIme);
+			TipKupca t = tipKupcaDAO.nadjiKupca(k.getTipKupca());
+			return g.toJson(t);
+		});
+		
+		post("/reserveTicket", (req, res)-> {
+			String korisnickoIme =  req.queryParams("korisnickoIme");
+			String manifestacijaId = req.queryParams("manifestacija");
+			String tipKarte = req.queryParams("tipKarte");
+			String kolicina = req.queryParams("kolicina");
+			
+			Kupac k = kupacDAO.nadjiKupcaProfil(korisnickoIme);
+			Manifestacija manifestacija = manifestacijeDAO.nadjiManifestaciju(Integer.parseInt(manifestacijaId));
+			
+			ArrayList<String> karte = kartaDAO.napraviKarte(tipKarte,kolicina, korisnickoIme,manifestacija.getId(), manifestacija.getCenaKarte());
+			kupacDAO.dodajKarteKupcu(karte, tipKarte,manifestacija.getCenaKarte(),Integer.parseInt(kolicina),korisnickoIme);
+			
+			if(k.getTipKupca().equals("OBICAN")) {
+				TipKupca t  = tipKupcaDAO.nadjiKupca("BRONZANI");
+				if(k.getBrojSakupljenihBodova() == t.getTrazeniBrojBodova()) {
+					k.setTipKupca("BRONZANI");
+				}
+			}else if(k.getTipKupca().equals("BRONZANI")) {
+				TipKupca t  = tipKupcaDAO.nadjiKupca("SREBRNI");
+				if(k.getBrojSakupljenihBodova() == t.getTrazeniBrojBodova()) {
+					k.setTipKupca("SREBRNI");
+				}
+			}else if(k.getTipKupca().equals("SREBRNI")) {
+				TipKupca t = tipKupcaDAO.nadjiKupca("ZLATNI");
+				if(k.getBrojSakupljenihBodova() == t.getTrazeniBrojBodova()) {
+					k.setTipKupca("ZLATNI");
+				}
+			}
+			kupacDAO.upisiKupce();
+			
+			manifestacijeDAO.smanjiBrojMesta(Integer.parseInt(kolicina),manifestacija);
+		
+			return true;
+			
+		});
+		
+>>>>>>> 5dbfbf9ca95c481ac0a41baf6cc2645a7ef20f3f
 	}
 
 }
