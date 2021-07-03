@@ -8,7 +8,10 @@ public class KartaSorter  implements Comparator<Karta> {
 
 	@Override
 	public int compare(Karta o1, Karta o2) {
-		 return o1.getDatumOtkazivanja().compareTo(o2.getDatumOtkazivanja());
+		if(o1.getDatumOtkazivanja() !=null && o2.getDatumOtkazivanja()!=null) {
+			return o1.getDatumOtkazivanja().compareTo(o2.getDatumOtkazivanja());
+		}
+		return 0;
 	}
 
 }

@@ -774,6 +774,7 @@ public class ProjekatManifestacijeMain  {
 	            ImageIO.write(image, "png", outputfile);
 	            
 	            manifestacija.setSlika("../images/" + imageName);
+	            manifestacija.setAktivnost(false);
 				HashMap<Integer, Manifestacija> manifestacije = manifestacijeDAO.getManifestacije();
 				manifestacije.put(id, manifestacija);
 				manifestacijeDAO.setManifestacije(manifestacije);
