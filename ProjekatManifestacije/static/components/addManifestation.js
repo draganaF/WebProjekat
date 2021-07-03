@@ -42,6 +42,7 @@ Vue.component('add-manifestation',{
         },
         checkInputs: function(e){
             e.preventDefault();
+            console.log("rrrrrrrrrr"+this.imagesForBackend);
             if(this.manifestationId != -1){
                 if(this.name == this.manifestation.naziv && this.type == this.manifestation.tipManifestacije &&
                     this.freeSeat == this.manifestation.slobodnaMesta && this.date == null &&
@@ -56,15 +57,13 @@ Vue.component('add-manifestation',{
             if((this.name != "" && this.name != null) && this.freeSeat != "" && this.freeSeat != null && 
                 this.price != "" && this.price != null && this.longitude != "" && this.longitude != null
                  && this.latitude != "" && this.latitude != null && this.street != "" && this.street != null &&
-                    this.number != "" && this.number != null && this.city != "" && this.city) {
+                    this.number != "" && this.number != null && this.city != "" && this.city && this.imagesForBackend!=null && this.imagesForBackend!="" ) {
                         if(this.isNumeric(this.freeSeat)){
                             if(this.isFloat(this.price)){
-                                if(this.isFloat(this.longitude)){
-                                    if(this.isFloat(this.latitude)){
+                                if(this.isFloat(this.longitude) || this.isFloat(this.latitude)) {
                                         if(this.isNumeric(this.number)){
                                             if(this.date != null && this.manifestationId != -1){
-                                                if(moment(this.manifestation.datum).isAfter(Date.now() && 
-                                                    moment(this.date).isBefore(Date.now()))){
+                                                if(Date.parse(this.manifestation.datum) > Date.now() && Date.parse(this.date) < Date.now()) {
                                                         this.error = "Ne mozete postaviti datum u prošlosti."
                                                     }
                                                     else{
@@ -72,7 +71,7 @@ Vue.component('add-manifestation',{
                                                     }
                                             }
                                             if(this.manifestationId == -1){
-                                                if(moment(this.date).isBefore(Date.now())){
+                                                if((Date.parse(this.datum) < Date.parse(Date.now()))){
                                                     this.error = "Ne mozete postaviti datum u prošlosti.";
                                                     return;
                                                 }
@@ -83,12 +82,8 @@ Vue.component('add-manifestation',{
                                             this.error = "Broj zgrade mora biti ceo broj."
                                         }
                                     }
-                                    else{
-                                        this.error = "Geografska širina mora biti broj."
-                                    }
-                                }
                                 else{
-                                    this.error = "Geografska dužina mora biti broj."
+                                    this.error = "Geografska dužina i geografska sirina moraju biti brojevi."
                                 }
                             }
                             else{
@@ -144,17 +139,13 @@ Vue.component('add-manifestation',{
                 this.updateManifestation();
         },
         createManifestation: function(){
-            
-            data= {
-                manifestacija: this.manifestation,
-                lokacija: this.location,
-               
-            }
-            console.log(data);
-            axios.post("/createManifestation", data)
+            axios.post("/createManifestation", {
+              manifestacija: this.manifestation,
+              lokacija: this.location,
+            })
             .then(response =>{
                 if(response.data){
-                    this.error = "Manifestacija je uspesno kreirana."
+                    alert("Manifestacija je uspesno kreirana.")
                 }
                 else{
                     this.error = "Uneta lokacija je zauzeta u unetom terminu."
@@ -162,33 +153,48 @@ Vue.component('add-manifestation',{
             })
         },
         updateManifestation: function(){
-            data= {
-                manifestacija: this.manifestation,
-                lokacija: this.location,
-               
-            }
-            console.log(data);
-
-            axios.post("/updateManifestation", data)
+            axios.post("/updateManifestation", {
+              manifestacija: this.manifestation,
+              lokacija: this.location,
+            })
             .then(resp=>{
                 if(resp.data == true){
-                    let config = {
-                        header : {
-                            "Content-Type": "multipart/form-data"
-                        }
-                        }
+                    alert("Manifestacija je uspesno kreirana");
                 }else{
                     this.error = "Uneta lokacija je zauzeta u unetom terminu."
                 }
             })
-    }
+        },
+
+        getLocation(){
+          axios.get('/manifestationLocation?id='+this.manifestation.id)
+          .then(resp=>{
+              this.location = resp.data;
+              this.longitude = this.location.geografskaDuzina;
+              this.latitude = this.location.geografskaSirina;
+              this.address = this.location.adresa;
+              this.street = this.address.ulica;
+              this.number = this.address.broj;
+              this.city = this.address.mesto ;
+              this.state = this.address.drzava;
+              this.zipCode = this.address.postanskiBroj;
+              this.check = true;
+          })
+        },
+        getManifestation(){
+          axios.get("/getManifestation?id=" + this.manifestationId)
+          .then(response => {
+              this.manifestation = response.data;
+              this.name = this.manifestation.naziv;
+              this.type = this.manifestation.tipManifestacije;
+              this.freeSeat = this.manifestation.slobodnaMesta;
+              this.price = this.manifestation.cenaKarte;
+              this.pictureShow = this.manifestation.slika;
+              this.getLocation();
+          })
+        },
     },
     mounted: function(){
-
-       /*
-        if(window.localStorage.getItem('role')!==''){
-            window.location.href ="/"
-        } */
         this.manifestationId = this.$route.params.id;
         map = new ol.Map({
             target: 'map',
@@ -210,31 +216,9 @@ Vue.component('add-manifestation',{
             vm.latitude = coordinate[1];
         });
         if(this.manifestationId != -1){
-                    axios.get("/getManifestation?id=" + this.manifestationId)
-                .then(response => {
-                    this.manifestation = response.data;
-                    this.name = this.manifestation.naziv;
-                    this.type = this.manifestation.tipManifestacije;
-                    this.freeSeat = this.manifestation.slobodnaMesta;
-                    this.price = this.manifestation.cenaKarte;
-                    this.pictureShow = this.manifestation.slika;
-                    axios.get('/manifestationLocation?id='+this.manifestation.id)
-                        .then(resp=>{
-                            this.location = resp.data;
-                            this.longitude = this.location.geografskaDuzina;
-                            this.latitude = this.location.geografskaSirina;
-                            this.address = this.location.adresa;
-                            this.street = this.address.ulica;
-                            this.number = this.address.broj;
-                            this.city = this.address.mesto ;
-                            this.state = this.address.drzava;
-                            this.zipCode = this.address.postanskiBroj;
-                            this.check = true;
-                        })
-                })
+            this.getManifestation();
         }
         else{
-            
             this.check = true;
         }
     },

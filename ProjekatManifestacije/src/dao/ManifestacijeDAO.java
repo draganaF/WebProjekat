@@ -190,7 +190,7 @@ public class ManifestacijeDAO {
 		{
 			if(!m.isObrisana()) 
 			{
-				if((m.getNaziv()).toLowerCase().contains(searchName.toLowerCase()) || m.getDatum().before(dateTo) && m.getDatum().after(dateFrom) && m.getCenaKarte() >= priceFrom && m.getCenaKarte() <= priceTo) 
+				if((m.getNaziv()).toLowerCase().contains(searchName.toLowerCase()) && m.getDatum().before(dateTo) && m.getDatum().after(dateFrom) && m.getCenaKarte() >= priceFrom && m.getCenaKarte() <= priceTo) 
 				{
 					if(!searchLocation.equals("")) 
 					{
@@ -309,6 +309,7 @@ public class ManifestacijeDAO {
 							}
 							else 
 							{
+								System.out.println(m.getNaziv());
 								validne.add(m);
 							}
 						}
@@ -413,13 +414,19 @@ public class ManifestacijeDAO {
 	}
 
 	@SuppressWarnings("deprecation")
-	public boolean checkAvaiability(Manifestacija manifestacija) {
+	public boolean checkAvaiability(Manifestacija manifestacija, Lokacija location) {
 		for(Manifestacija m : this.manifestacije.values()) {
-			if(m.getDatum().getDate() == manifestacija.getDatum().getDate() && m.getDatum().getMonth() == manifestacija.getDatum().getMonth()) {
-				return false;
+			Lokacija l = dao.lokacijaManifestacije(m.getId());
+			if(m.getId() != manifestacija.getId()) {
+				if(m.getDatum().getDate() == manifestacija.getDatum().getDate() && m.getDatum().getMonth() == manifestacija.getDatum().getMonth()
+					 && l.getGeografskaDuzina() == location.getGeografskaDuzina() && location.getGeografskaSirina() == l.getGeografskaDuzina()
+								|| (l.getAdresa().getDrzava().equals(location.getAdresa().getDrzava()) && l.getAdresa().getMesto().equalsIgnoreCase(location.getAdresa().getMesto()) && 
+									     l.getAdresa().getUlica().equalsIgnoreCase(location.getAdresa().getUlica()) && location.getAdresa().getBroj() == l.getAdresa().getBroj() )) {
+					return false;
+				}
 			}
 		}
-		return false;
+		return true;
 	}
 	
 	public void  smanjiBrojMesta(int kolicina, Manifestacija manifestacija){
