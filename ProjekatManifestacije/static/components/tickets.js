@@ -205,7 +205,7 @@ Vue.component("tickets", {
                 <div class="card-header row justify-content-center"  style="background-color:#1fb579; color:white">Karte</div>
                 <div class="card-body">
                 <div class="row rone">
-                            <input  class="form-control jk" type="text"  v-model="pretragaManifestacija" placeholder="Pretraga po manifestaciji" style="margin: 0.3em; width: 12em;"></input>
+                            <input  class="form-control jk" type="text"  v-model="pretragaManifestacija" placeholder="Pretraga po nazivu" style="margin: 0.3em; width: 14em;"></input>
                             <input  class="form-control jk" type="date"  v-model="pretragaDatumOd" placeholder="Datum od" style="margin: 0.3em; width: 12em;"></input>
                             <input class="form-control jk" type="date"  v-model="pretragaDatumDo" placeholder="Datum do" style="margin: 0.3em; width: 12em;"></input>
                             <input  class="form-control jk" type="text"  v-model="pretragaCenaOd" placeholder="Cena od" style="margin: 0.3em; width: 12em;"></input>

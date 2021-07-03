@@ -76,7 +76,7 @@ Vue.component("adminTableUsers", {
                 user.sumnjiv = response.data[i].sumnjiv;
                 user.blokiran = response.data[i].blokiran;
                 user.points = response.data[i].brojSakupljenihBodova;
-                user.type= response.data[i].tipKupca.tip;
+                user.type= response.data[i].tipKupca;
                 user.role = "kupac";
                 this.users.push(user);
             }
@@ -291,7 +291,7 @@ Vue.component("adminTableUsers", {
                         </form>
                     </div>
                     <div class="col-4">
-                        <select v-model="uloga" class="sel" @change="search">
+                        <select v-model="uloga" class="form-control jk sel" @change="search">
                         <option value="" selected>Svi</option>
                         <option value="prodavac" >Prodavac</option>
                         <option value="kupac">Kupac</option>
@@ -299,7 +299,7 @@ Vue.component("adminTableUsers", {
                         </select>
                     </div>
                     <div class="col-4">
-                        <select v-model="tip" class="sel" @change="search">
+                        <select v-model="tip" class="form-control jk sel" @change="search">
                         <option value="" selected>Svi</option>
                         <option value="OBICAN" >Obican</option>
                         <option value="SREBRNI">Srebrni</option>

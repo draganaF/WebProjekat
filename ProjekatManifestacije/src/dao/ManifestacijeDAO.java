@@ -344,7 +344,7 @@ public class ManifestacijeDAO {
 						izabrane.add(k);
 					}
 				}else {
-					if(k.getManifestacija() == m.getId() && m.getDatum().before(datumDo) && m.getDatum().after(datumOd) && m.getNaziv().contains(naziv) ) {
+					if(k.getManifestacija() == m.getId() && m.getDatum().before(datumDo) && m.getDatum().after(datumOd) && m.getNaziv().toLowerCase().contains(naziv.toLowerCase()) ) {
 					izabrane.add(k);
 					}
 			}}
@@ -358,10 +358,11 @@ public class ManifestacijeDAO {
 		ArrayList<Karta> izabrane = new ArrayList<Karta>();
 		for(Karta k : tempKarte) {
 			for(Manifestacija m : manifestacije.values()) {
-				if(naziv.equals("")) {
+				if(k.getManifestacija() == m.getId() && naziv.equals("")) {
 					return izabrane;
 				}else {
-					if(k.getManifestacija() == m.getId() && m.getNaziv().contains(naziv) ) {
+					
+					if(k.getManifestacija() == m.getId() && (m.getNaziv().toLowerCase()).contains(naziv.toLowerCase()) ) {
 						izabrane.add(k);
 					}
 				}

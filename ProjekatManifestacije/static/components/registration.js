@@ -35,7 +35,7 @@ Vue.component("registrationPage", {
                     pol : this.gender,
                     datumRodjenja : this.date
                     })
-        .then(response => (console.log(response)));
+        .then(response => (	alert("Uspesno ste se registrovali!")));
       }
 
       

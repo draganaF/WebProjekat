@@ -60,13 +60,13 @@ Vue.component("manifestations", {
 			}
 			else
 			{
-				if(this.role == 'prodavac'){
-					axios.get('/searchManifestationsSeller', {params:{searchName:this.searchName, korisnickoIme:this.username, searchLocation:this.searchLocation, searchPriceFrom:this.searchPriceFrom,searchPriceTo:this.searchPriceTo, searchDateFrom:this.searchDateFrom,searchDateTo:this.searchDateTo,filterAvaiable:this.filterAvailable,filterType:this.filterType}})
-					.then(response => {
-						this.manifestationList = response.data;
-				});
+				//if(this.role == 'prodavac'){
+				//	axios.get('/searchManifestationsSeller', {params:{searchName:this.searchName, korisnickoIme:this.username, searchLocation:this.searchLocation, searchPriceFrom:this.searchPriceFrom,searchPriceTo:this.searchPriceTo, searchDateFrom:this.searchDateFrom,searchDateTo:this.searchDateTo,filterAvaiable:this.filterAvailable,filterType:this.filterType}})
+			//		.then(response => {
+			//			this.manifestationList = response.data;
+			//	});
 
-				}else{
+			//	}else{
 					var searchParameters = "searchName=" + this.searchName+ "&searchLocation=" + this.searchLocation + "&searchPriceFrom=" + this.searchPriceFrom + "&searchPriceTo=" + this.searchPriceTo + "&searchDateFrom=" + this.searchDateFrom + "&searchDateTo=" + this.searchDateTo + "&filterAvaiable=" + this.filterAvailable + "&filterType=" + this.filterType;
 
 					axios.get("/searchManifestations?" + searchParameters)
@@ -75,7 +75,7 @@ Vue.component("manifestations", {
 							})
 				}
 				
-			}
+			//}
 		},
 		compareData: function(a,b){
 			let first, second;

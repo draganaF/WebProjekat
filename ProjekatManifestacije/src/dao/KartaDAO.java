@@ -201,7 +201,7 @@ public class KartaDAO {
 					}
 				}else {
 					if(!k.isObrisana() && k.getTipKarte().name().contains(tip) && !k.isStatus()) {
-					izabrane.add(k);
+						izabrane.add(k);
 					}
 				}
 			}else {
@@ -211,7 +211,7 @@ public class KartaDAO {
 					}
 				}else {
 					if(!k.isObrisana() && k.getTipKarte().name().contains(tip)) {
-					izabrane.add(k);
+						izabrane.add(k);
 					}
 				}
 			}

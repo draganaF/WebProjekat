@@ -235,7 +235,7 @@ Vue.component("manifestation", {
               <li class="list-group-item">Slobodna mesta: {{manifestation.slobodnaMesta}}</li>
               <li class="list-group-item">Status: {{nadjiStatus()}}</li>
               <li class="list-group-item">Ocena: {{srednjaOcena(manifestation.id)}}</li>
-              <li v-if="role == 'kupac'" class="list-group-item"><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" :id = "manifestation.id">Rezervisi</button></li>
+              <li v-if="role == 'kupac' && nadjiStatus() == 'AKTIVNA'" class="list-group-item"><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" :id = "manifestation.id">Rezervisi</button></li>
             </ul> 
           </div>
           <div class="list-group-item" style="margin-left:4em;">Lokacija: {{ location.adresa.drzava}}, {{location.adresa.mesto}}, {{ location.adresa.ulica }} {{location.adresa.broj}}
