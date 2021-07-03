@@ -666,8 +666,12 @@ public class ProjekatManifestacijeMain  {
 			
 			ManifestacijaDAO m = gsonReg.fromJson(reqBody, ManifestacijaDAO.class);
 			Lokacija lokacija = m.getLokacija();
+			if(!manifestacijeDAO.checkAvaiability(m.getManifestacija(), lokacija)) {
+				return false;
+			}
 			HashMap<Integer, Lokacija> lokacije = lokacijeDAO.getLokacije();
 			for(Lokacija l : lokacije.values()) {
+				
 				if(l.getId() == lokacija.getId()) {
 					l.setGeografskaDuzina(lokacija.getGeografskaDuzina());
 					l.setGeografskaSirina(lokacija.getGeografskaSirina());
@@ -675,6 +679,7 @@ public class ProjekatManifestacijeMain  {
 					break;
 				}
 			}
+			
 			lokacijeDAO.setLokacije(lokacije);
 			lokacijeDAO.upisiLokacije();
 			
@@ -682,8 +687,8 @@ public class ProjekatManifestacijeMain  {
 			if(manifestacija.getBrojMesta() < manifestacija.getSlobodnaMesta()) {
 				return false;
 			}
-			
-			if(!(manifestacija.getSlika().split(",")[1]).equals("")) {
+			boolean slikaPromijenjena = false;
+			if(manifestacija.getSlika()!=null) {
 				String imageString = manifestacija.getSlika().split(",")[1];
 				BufferedImage image = null;
 	            byte[] imageByte;
@@ -699,6 +704,7 @@ public class ProjekatManifestacijeMain  {
 	            ImageIO.write(image, "png", outputfile);
 	            
 	            manifestacija.setSlika("../images/" + imageName);
+	            slikaPromijenjena = true;
 			}
 		
 			
@@ -712,11 +718,12 @@ public class ProjekatManifestacijeMain  {
 					mm.setDatum(manifestacija.getDatum());
 					mm.setLokacija(lokacija.getId());
 					mm.setNaziv(manifestacija.getNaziv());
-					mm.setSlika(manifestacija.getSlika());
 					mm.setSlobodnaMesta(manifestacija.getSlobodnaMesta());
 					mm.setStatus(manifestacija.isStatus());
 					mm.setTipManifestacije(manifestacija.getTipManifestacije());
-					
+					if(slikaPromijenjena) {
+						mm.setSlika(manifestacija.getSlika());
+					}
 					break;
 				}
 			}
@@ -735,15 +742,14 @@ public class ProjekatManifestacijeMain  {
 			Lokacija lokacija = m.getLokacija();
 			lokacija.setId(lokacijaId);
 			
-			if(lokacijeDAO.checkLocation(lokacija)) {
-				return false;
-			}
-			
 			int id = manifestacijeDAO.nadjiSledeciId();
 			Manifestacija manifestacija = m.getManifestacija();
 			manifestacija.setId(id);
 			manifestacija.setLokacija(lokacijaId);
 		
+			if(manifestacija.getSlika() == null) {
+				return false;
+			}
 			String imageString = manifestacija.getSlika().split(",")[1];
 			BufferedImage image = null;
             byte[] imageByte;
@@ -756,7 +762,7 @@ public class ProjekatManifestacijeMain  {
             String imageName= "manifestacije" + id + ".png";
             
             
-			if(manifestacijeDAO.checkAvaiability(manifestacija)) {
+			if(manifestacijeDAO.checkAvaiability(manifestacija, lokacija)) {
 				File outputfile = new File(System.getProperty("user.dir")+ "\\static\\images\\" + imageName);
 	            ImageIO.write(image, "png", outputfile);
 	            

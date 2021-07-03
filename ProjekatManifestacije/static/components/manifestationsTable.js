@@ -211,7 +211,7 @@ Vue.component("manifestationsTable", {
                             </tr>
 
                     </table>
-                    <button @click="addManifestation" class="btn btn-success">Dodaj manifestaciju</button>
+                    <button v-if="role=='prodavac'" @click="addManifestation" class="btn btn-success">Dodaj manifestaciju</button>
           
                 </div>
             </div>
