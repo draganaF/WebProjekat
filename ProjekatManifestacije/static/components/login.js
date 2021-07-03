@@ -16,10 +16,10 @@ Vue.component("login", {
 	          .then(function(response){
                   
                 if(JSON.parse(JSON.stringify(response.data))[0]===" "){
-                    alert("Pogresno korisnicko ime ili lozinka")
+                    alert("Pogresno korisnicko ime ili lozinka");
                     
                 }else if(JSON.parse(JSON.stringify(response.data))[0]==="blokiran"){
-                    alert("Vas nalog je blokiran")
+                    alert("Vas nalog je blokiran");
                     
                 }
                 else{

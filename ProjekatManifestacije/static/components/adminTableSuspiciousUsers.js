@@ -237,7 +237,7 @@ Vue.component("adminTableSuspiciousUsers", {
                         </form>
                     </div>
                     <div class="col-4">
-                        <select v-model="tip" class="sel" @change="search">
+                        <select v-model="tip" class="form-control jk sel" @change="search">
                         <option value="" selected>Svi</option>
                         <option value="OBICAN" >Obican</option>
                         <option value="SREBRNI">Srebrni</option>

@@ -58,7 +58,7 @@ Vue.component("changePassword", {
     `  <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card">
-                    <div class="card-header"  style="background-color:#1fb579; color:white">Profil</div>
+                    <div class="card-header"  style="background-color:#1fb579; color:white">Promena lozinke</div>
                         <div class="card-body">
           <form name="myform" @submit="formSubmit">
           <div class="form-group row">
