@@ -82,12 +82,14 @@ public class LokacijaDAO {
 		
 	}
 
-	public boolean checkLocation(Lokacija location) {
+	public boolean checkLocation(Lokacija location, int id) {
 		for(Lokacija l : this.lokacije.values()) {
-			if(l.getGeografskaDuzina() == location.getGeografskaDuzina() && location.getGeografskaSirina() == l.getGeografskaDuzina()
-				|| (l.getAdresa().getDrzava().equals(location.getAdresa().getDrzava()) && l.getAdresa().getMesto().equalsIgnoreCase(location.getAdresa().getMesto()) && 
-					l.getAdresa().getUlica().equalsIgnoreCase(location.getAdresa().getUlica()) && location.getAdresa().getBroj() == l.getAdresa().getBroj() )) {
-				return false;
+			if(l.getId() != id) {
+				if(l.getGeografskaDuzina() == location.getGeografskaDuzina() && location.getGeografskaSirina() == l.getGeografskaDuzina()
+						|| (l.getAdresa().getDrzava().equals(location.getAdresa().getDrzava()) && l.getAdresa().getMesto().equalsIgnoreCase(location.getAdresa().getMesto()) && 
+					     l.getAdresa().getUlica().equalsIgnoreCase(location.getAdresa().getUlica()) && location.getAdresa().getBroj() == l.getAdresa().getBroj() )) {
+					return false;
+				}
 			}
 		}
 		return true;

@@ -13,7 +13,7 @@ Vue.component("manifestations", {
       searchPriceTo: "",
       filterType: "",
       filterAvailable: "",
-      sortType: true,
+      sortType: "",
       sortCriteria: "",
 	  role:"",
 	  username:"",
@@ -199,6 +199,7 @@ Vue.component("manifestations", {
 		compareDate: function(a,b){
 			if(this.sortType == 'rastuce')
 			{
+				console.log("jjjjjjjjjjjjjjjjjjjjj")
 				if (Date.parse(a.datum) > Date.parse(b.datum)) {
 					return 1;
 			  }  
@@ -225,7 +226,8 @@ Vue.component("manifestations", {
 			}
 		},
 		sortData: function(){
-			if(sortType != "rastuce" && this.sortType != "opadajuce")
+			
+			if(this.sortType != "rastuce" && this.sortType != "opadajuce")
 			{
 				alert("Unesite smer sortiranja pretrage");
 			}
@@ -255,18 +257,28 @@ Vue.component("manifestations", {
 	}else{*/
     axios.get("/manifestations")
 			.then(response => {
-				this.manifestationList = response.data;
+				for(let i = 0; i < response.data.length; i++){
+					if(response.data[i].obrisana == false || response.data[i].obrisana == 0 ){
+						this.manifestationList.push(response.data[i]);
+					}
+				}
 			});
 		
 		axios.get("/manifestationLocations")
 			.then(response => {
 				this.locationList = response.data;
-			});
-
-		axios.get("/comments")
+				axios.get("/comments")
 			.then(response => {
 				this.oceneList = response.data;
+				this.sortType = "rastuce";
+				this.sortCriteria = "datumVreme";
+				this.sortData();
 			});
+			});
+
+		
+
+		
 		//}
   },
   template: `
@@ -297,13 +309,13 @@ Vue.component("manifestations", {
 						<option value="POZORISTE" >Pozoriste</option>
 					</select>
 					<select class="form-control jk" v-model="sortCriteria" style="margin: 0.3em; margin-left:14em; width: 14.2em;">
-						<option value='naziv'>Naziv manifestacije</option>
+						<option value="naziv">Naziv manifestacije</option>
 						<option value="datumVreme">Datum i vreme odrzavanja</option>
 						<option value="cena">Cena karte</option>
 						<option value="lokacija">Lokacija</option>
 					</select>
 					<select class="form-control jk" v-model="sortType" style="margin: 0.3em; width: 14.2em;">
-						<option value='rastuce'>Rastuce</option>
+						<option value="rastuce">Rastuce</option>
 						<option value="opadajuce">Opadajuce</option>
 					</select>
 				</div>
@@ -318,14 +330,14 @@ Vue.component("manifestations", {
 		</div>
 		</hr>
 		<div class="justify-content-center">
-		<div class="row row-cols-4 row-cols-md-3 g-2" style="margin-left: 1em; margin-top: 5em;">
-				<div class="col-lg-4" v-for="(manifestation, index) in manifestationList" width="350em">
-				<div class="card" style="margin-bottom:1em;" width="350em">
-					<div class="img-square-wrapper" style="margin-left: 4.5em;" hight="360em">
+		<div class="row" style="margin-left: 1em; margin-top: 5em;">
+				<div style="margin-left:2em;" v-for="(manifestation, index) in manifestationList" >
+				<div class="card" style="margin-bottom:1em;">
+					<div class="img-square-wrapper" style="margin-left: 4.5em;">
 						<img :src="manifestation.slika" width="330em" height="350em">
 					</div>
 				
-					<div class="card-body" width="350em">
+					<div class="card-body">
 						<h5 class="card-title">{{ manifestation.naziv }}</h5>
 						<ul class="list-group list-group-flush">
 							<li class="list-group-item">Tip: {{ manifestation.tipManifestacije }}</li>
