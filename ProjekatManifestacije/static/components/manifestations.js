@@ -38,7 +38,7 @@ Vue.component("manifestations", {
 			let brojOcena = 0;
 			for(let i = 0; i < this.oceneList.length; i++)
 			{
-				if(id == this.oceneList[i].manifestacija)
+				if(id == this.oceneList[i].manifestacija && this.oceneList[i].odobrena == 1)
 				{
 					srednjaVrednost = srednjaVrednost + this.oceneList[i].ocena;
 					brojOcena++;
@@ -199,7 +199,6 @@ Vue.component("manifestations", {
 		compareDate: function(a,b){
 			if(this.sortType == 'rastuce')
 			{
-				console.log("jjjjjjjjjjjjjjjjjjjjj")
 				if (Date.parse(a.datum) > Date.parse(b.datum)) {
 					return 1;
 			  }  

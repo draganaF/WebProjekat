@@ -40,6 +40,15 @@ public class ManifestacijeDAO {
 		return manifestacije;
 	}
 	
+	public ArrayList<Manifestacija> getValidneManifestacije(){
+		ArrayList<Manifestacija> validne = new ArrayList<Manifestacija>();
+		for(Manifestacija m : this.manifestacije.values()) {
+			if(!m.isObrisana()) {
+				validne.add(m);
+			}
+		}
+		return validne;
+	}
 	public void setManifestacije(HashMap<Integer,Manifestacija> manifestacije) {
 		this.manifestacije = manifestacije; 
 	}
@@ -184,7 +193,7 @@ public class ManifestacijeDAO {
 			priceTo = Float.parseFloat(searchPriceTo);
 		}
 		
-		//System.out.println(filterAvaiable+ " " + filterType + " " + dateFrom + " " + dateTo + " " + searchName + " " + searchLocation + " "+ priceFrom + " " + priceTo + " ");
+		System.out.println(filterAvaiable+ " " + filterType + " " + dateFrom + " " + dateTo + " " + searchName + " " + searchLocation + " "+ priceFrom + " " + priceTo + " ");
 
 		for(Manifestacija m : pretraziManifestacije.values()) 
 		{
@@ -194,7 +203,7 @@ public class ManifestacijeDAO {
 				{
 					if(!searchLocation.equals("")) 
 					{
-						Lokacija lokacija = dao.getLokacije().get(Integer.parseInt(searchLocation));
+						Lokacija lokacija = dao.getLokacije().get(m.getId());
 						if(lokacija.getAdresa().getDrzava().toLowerCase().contains(searchLocation.toLowerCase()) || lokacija.getAdresa().getMesto().toLowerCase().contains(searchLocation.toLowerCase())) 
 						{
 							if(filterAvaiable.equalsIgnoreCase("true")) {
@@ -309,7 +318,6 @@ public class ManifestacijeDAO {
 							}
 							else 
 							{
-								System.out.println(m.getNaziv());
 								validne.add(m);
 							}
 						}

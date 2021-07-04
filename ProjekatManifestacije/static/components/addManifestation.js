@@ -42,7 +42,6 @@ Vue.component('add-manifestation',{
         },
         checkInputs: function(e){
             e.preventDefault();
-            console.log("rrrrrrrrrr"+this.imagesForBackend);
             if(this.manifestationId != -1){
                 if(this.name == this.manifestation.naziv && this.type == this.manifestation.tipManifestacije &&
                     this.freeSeat == this.manifestation.slobodnaMesta && this.date == null &&
@@ -122,8 +121,9 @@ Vue.component('add-manifestation',{
             else{
                 this.manifestation.datum = new Date(this.manifestation.datum);
             }
+            this.manifestation.brojMesta = parseInt(this.freeSeat);
             this.manifestation.slobodnaMesta = parseInt(this.freeSeat);
-            this.manifestation.cena = parseFloat(this.price);
+            this.manifestation.cenaKarte = parseFloat(this.price);
             this.location.geografskaDuzina = parseFloat(this.longitude);
             this.location.geografskaSirina = parseFloat(this.latitude);
             this.address.ulica = this.street;

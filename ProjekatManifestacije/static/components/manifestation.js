@@ -58,11 +58,11 @@ Vue.component("manifestation", {
           if(this.tickets[i].kupac == this.user) {
             for(var j = 0; j < this.comments.length; j++) {
               if(this.comments.kupac == this.user){
-                this.canComment = false;
+                this.canComment = true;
                 return;
               }
             }
-            this.canComment = true;
+            this.canComment = false;
           }
         }
       }
@@ -103,7 +103,7 @@ Vue.component("manifestation", {
 			let srednjaVrednost = 0;
 			let brojOcena = 0;
 			for(let i = 0; i < this.comments.length; i++) {
-				if(id == this.comments[i].manifestacija) {
+				if(id == this.comments[i].manifestacija && this.comments[i].odobrena == 1) {
 					srednjaVrednost = srednjaVrednost + this.comments[i].ocena;
 					brojOcena++;
 				}
@@ -262,7 +262,7 @@ Vue.component("manifestation", {
         </div>
       </div>
       <div v-if="role=='prodavac' || role=='admin'" v-for="comment in comments" class="comment-widgets">
-        <div class="d-flex flex-row comment-row m-t-0">
+        <div v-if="comment.odobrena != -1" class="d-flex flex-row comment-row m-t-0">
           <div class="p-2"><img src="./images/user.jpg" alt="user" width="50" class="rounded-circle"></div>
           <div class="comment-text w-100">
               <h6 class="font-medium">{{ comment.kupac }}</h6> <span class="m-b-15 d-block">{{ comment.tekst }} </span>

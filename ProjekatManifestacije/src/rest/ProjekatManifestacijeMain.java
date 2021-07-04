@@ -58,7 +58,7 @@ public class ProjekatManifestacijeMain  {
 		staticFiles.externalLocation(new File("./static").getCanonicalPath());
 		
 		get("/manifestations", (req, res) -> {
-			return g.toJson(manifestacijeDAO.getManifestacije().values());
+			return g.toJson(manifestacijeDAO.getValidneManifestacije());
 		});
 		
 		post("/registration", (req, res)-> {
@@ -789,6 +789,13 @@ public class ProjekatManifestacijeMain  {
 			lokacijeDAO.setLokacije(lokacije);
 			lokacijeDAO.upisiLokacije();
 			
+			HashMap<String, Prodavac> prodavci = prodavacDAO.getProdavci();
+			for(Prodavac p : prodavci.values()) {
+				if(manifestacija.getProdavac().equalsIgnoreCase(p.getKorisnickoIme())) {
+					p.getManifestacije().add(manifestacija.getId());
+				}
+			}
+			prodavacDAO.upisiProdavce();
 			return true;
 			
 		});
